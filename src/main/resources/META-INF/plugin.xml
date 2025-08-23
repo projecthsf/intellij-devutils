@@ -12,17 +12,37 @@
   <!-- Indicate this plugin can be loaded in all IntelliJ Platform-based products. -->
   <depends>com.intellij.modules.platform</depends>
 
-
   <!-- Text to display as description on Settings | Plugin page -->
   <description>
     <![CDATA[
     <ol>
-      <li>Monolith
+      <li>V1.0.0<br />
+        <p>- Apply with dataset: Allow you apply a piece of code to dataset, its helpful for create DTO converters</p>
+
+        <p>- Name case utils:</p>
         <ul>
-          <li>Support create directory follow <a href="https://github.com/vcollective/doc-vc-rfc/blob/main/accepted/monolith-component-structure/README.md">hexagon structure</a></li>
-          <li>Support create class follow <a href="https://github.com/vcollective/doc-vc-rfc/blob/main/accepted/monolith-component-structure/README.md">hexagon structure</a></li>
-          <li>Support generate entity follow <a href="https://github.com/vcollective/doc-vc-rfc/blob/main/accepted/monolith-component-structure/README.md">hexagon structure</a></li>
-          <li>Support generate test entity</li>
+          <li> Convert selected to camel case (yourName)</li>
+          <li> Convert selected to snake case (your_name)</li>
+          <li> Convert selected to kebab case (your-name)</li>
+          <li> Convert selected to upper case (YOUR NAME)</li>
+          <li> Convert selected to lower case (your name)</li>
+          <li> Convert selected to constant case (YOUR_NAME)</li>
+        </ul>
+        <p>- Converter</p>
+        <ul>
+          <li>Extract simple JSON (1-level) to POJO with custom a templates</li>
+          <li>Extract SQL create stament to POJO with custom a templates</li>
+        </ul>
+        <p>- String Utils</p>
+        <ul>
+          <li>Config SQL data type mapping</li>
+          <li>Get length of selected</li>
+          <li>Remove HTML tags</li>
+          <li>Join multi line to one line with a delimiter</li>
+          <li>Split string with a separator to multi line</li>
+          <li>Support wrap selected string with single/double quote</li>
+          <li>String toggel quotes (i.e: "1", "2" -> '1', '2')</li>
+          <li>Make a list of string (i.e: 1,2,3 -> "1", "2", "3")</li>
         </ul>
       </li>
       </ol>
@@ -37,38 +57,55 @@
   </change-notes>
 
   <!-- Text to display as company information on Settings | Plugin page -->
-  <vendor url="https://plugins.jetbrains.com">IntelliJ Platform SDK</vendor>
+  <vendor email="w2ajax@gmail.com" url="https://github.com/projecthsf/go-playground">Jin Nguyen</vendor>
 
   <!-- Declare the default resource location for localizing menu strings -->
-  <resource-bundle>messages.BasicActionsBundle</resource-bundle>
-
-
   <actions>
 
     <group id="DevUtils.StringUtils" text="String Utils" popup="true" class="io.github.projecthsf.devutils.actions.strings.StringsActionGroup">
       <add-to-group group-id="EditorPopupMenu" anchor="first"/>
     </group>
-    <group id="DevUtils.ApplyDataSet" text="Apply With Dataset" popup="true">
+    <group id="DevUtils.ApplyDataSet" text="Apply With Dataset" popup="true" class="io.github.projecthsf.devutils.actions.applydataset.ApplyDatasetActionGroup">
       <add-to-group group-id="EditorPopupMenu" anchor="first"/>
     </group>
 
-    <group id="StringUtils.Actions" text="Name Case Converter" popup="true" description="Provide some string utils" class="io.github.projecthsf.devutils.actions.namecase.NameCaseActionGroup">
+    <group id="StringUtils.NameCases" text="Name Case Converter" popup="true" description="Provide some string utils" class="io.github.projecthsf.devutils.actions.namecase.NameCaseActionGroup">
       <add-to-group group-id="EditorPopupMenu" anchor="first"/>
     </group>
 
-    <action id="ApplyDataSetAsCodeTemplateAction" class="io.github.projecthsf.devutils.actions.applydataset.ApplyDataSetAsCodeTemplateAction"
-            icon="AllIcons.Nodes.Template" text="As Code Template">
-      <add-to-group group-id="DevUtils.ApplyDataSet" anchor="first"/>
-    </action>
-    <action id="ApplyDataSetAsDatasetAction" class="io.github.projecthsf.devutils.actions.applydataset.ApplyDataSetAsDatasetAction"
-            icon="AllIcons.FileTypes.Csv" text="As Code Dataset">
-      <add-to-group group-id="DevUtils.ApplyDataSet" anchor="first"/>
-    </action>
+    <group id="StringUtils.Converters" text="Converters" popup="true" description="Provide some string utils" class="io.github.projecthsf.devutils.actions.converters.ConverterActionGroup">
+      <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+    </group>
+
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
+    <applicationConfigurable  instance="io.github.projecthsf.devutils.settings.EmptyConfigurable"
+                              id="DevUtils" displayName="Dev Utils" />
+
+    <applicationConfigurable  instance="io.github.projecthsf.devutils.settings.DtoTemplateConfigurable"
+                              id="DevUtils.DtoTemplate" parentId="DevUtils" displayName="DTO Templates" />
+
+
+    <applicationConfigurable  instance="io.github.projecthsf.devutils.settings.EmptyConfigurable"
+                              id="DevUtils.DataTypeMap" parentId="DevUtils" displayName="Data Type Mapping" />
+    <applicationConfigurable  instance="io.github.projecthsf.devutils.settings.DataTypeMapConfigurable$SqlDataTypeConfigureable"
+                              id="DevUtils.DataTypeMap.Sql" parentId="DevUtils.DataTypeMap" displayName="SQL" />
+
+    <applicationConfigurable  instance="io.github.projecthsf.devutils.settings.DataTypeMapConfigurable$JsonDataTypeConfigureable"
+                              id="DevUtils.DataTypeMap.Json" parentId="DevUtils.DataTypeMap" displayName="JSON" />
+
+    <applicationService serviceImplementation="io.github.projecthsf.devutils.settings.StateComponent"/>
     <toolWindow id="DevUtils" secondary="true"  doNotActivateOnStart="true" icon="AllIcons.General.ExternalTools" anchor="right"
                 factoryClass="io.github.projecthsf.devutils.toolWindow.DevUtilsToolWindowFactory"/>
+
+
+  <!-- SQL Language -->
+    <!--
+    <fileType name="SqlFile" implementationClass="io.github.projecthsf.devutils.languages.sql.SqlFileType" fieldName="INSTANCE" language="DevUtilSQL" extensions="devutilsql"/>
+    <lang.parserDefinition language="DevUtilSQL" implementationClass="io.github.projecthsf.devutils.languages.sql.SqlParserDefinition"/>
+    <lang.syntaxHighlighterFactory language="DevUtilSQL" implementationClass="io.github.projecthsf.devutils.languages.sql.SqlSyntaxHighlighterFactory"/>
+    <colorSettingsPage implementation="io.github.projecthsf.devutils.languages.sql.SqlColorSettingsPage" />-->
   </extensions>
 
 
