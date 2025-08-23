@@ -14,8 +14,34 @@ public class NameCaseUtil {
             case UPPER_CASE -> text.toUpperCase();
             case LOWER_CASE -> text.toLowerCase();
         };
-
     }
 
+    // $NameCaseUtil.camelCase($field.name)
+    public static String camelCase(String text) {
+        return toNameCase(NameCaseEnum.CAMEL_CASE, text);
+    }
 
+    public static String kebabCase(String text) {
+        return toNameCase(NameCaseEnum.KEBAB_CASE, text);
+    }
+
+    public static String pascalCase(String text) {
+        return toNameCase(NameCaseEnum.PASCAL_CASE, text);
+    }
+
+    public static String snakeCase(String text) {
+        return toNameCase(NameCaseEnum.SNAKE_CASE, text);
+    }
+
+    public static String constantCase(String text) {
+        return toNameCase(NameCaseEnum.CONSTANT_CASE, text);
+    }
+
+    public static String upperCase(String text) {
+        return toNameCase(NameCaseEnum.UPPER_CASE, text);
+    }
+
+    public static String lowerCase(String text) {
+        return toNameCase(NameCaseEnum.LOWER_CASE, text);
+    }
 }
