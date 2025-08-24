@@ -1,0 +1,26 @@
+The supported keywords in template:
+<ol>
+    <li>${classname} = class name (in PascalCase format)</li>
+    <li>${property.type} = property data type</li>
+    <li>${property.name} = property name, by default property name is in camel case format</li>
+</ol>
+
+<p>Note*: ${property.type} and ${property.name} MUST be in loop of properties, as bellow</p>
+<pre>
+#foreach($property in $properties)
+     ${property.type} ${property.name}
+#end
+</pre>
+
+<p>There is a NameCaseUtil that you can use to convert ${classname}/${property.type}/${property.name} to another name case, as bellow:</p>
+<p>
+    <ul>
+        <li>$NameCaseUtil.snakeCase(${property.name}): convert to snake case</li>
+        <li>$NameCaseUtil.camelCase(${property.name}): convert to camel case</li>
+        <li>$NameCaseUtil.kebabCase(${property.name}): convert to kebab case</li>
+        <li>$NameCaseUtil.pascalCase(${property.name}): convert to pascal case</li>
+        <li>$NameCaseUtil.constantCase(${property.name}): convert to constant case</li>
+        <li>$NameCaseUtil.upperCase(${property.name}): convert to upper case</li>
+        <li>$NameCaseUtil.lowerCase(${property.name}): convert to lower case</li>
+    </ul>
+</p>

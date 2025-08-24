@@ -1,0 +1,90 @@
+{
+  tokens=[
+    SEMI=';'
+    EQ='='
+    LP='('
+    RP=')'
+
+    space='regexp:\s+'
+    comment='regexp://.*'
+    number='regexp:\d+(\.\d*)?'
+    string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
+  ]
+
+  name(".*expr")='expression'
+  extends(".*expr")=expr
+}
+
+root ::= pipelineObj*
+pipelineObj ::= 'pipeline' '{' pipelineDefinitions* '}'
+private pipelineDefinitions ::= agent | options | tools | parameters
+
+// agent
+private agent ::= 'agent' agentLiteral | 'agent' '{' agentDefinition* '}'
+private agentDefinition ::= label | node | docker | dockerfile | kubernetes
+
+// node
+private node ::= 'node' '{' nodeDefinitions* '}'
+private nodeDefinitions ::= label | customWorkspace
+// docker
+private docker ::= 'docker' string | 'docker' '{' dockerDefinition* '}'
+private dockerDefinition ::= image | label | args | registryUrl | registryCredentialsId | customWorkspace | reuseNode
+
+//docker file
+private dockerfile ::= 'dockerfile' '{' dockerfileDefinition* '}'
+private dockerfileDefinition ::= dir | filename | label | additionalBuildArgs | args | registryUrl | registryCredentialsId | customWorkspace | reuseNode
+
+// kubernetes
+private kubernetes::= 'kubernetes' '{' kubernetesDefinition* '}'
+private kubernetesDefinition ::= defaultContainer | yaml
+
+private options ::= 'options' '{' optionsDefinition* '}'
+private optionsDefinition ::= buildDiscarder | checkoutToSubdirectory | disableConcurrentBuilds | disableResume | newContainerPerStage | overrideIndexTriggers | preserveStashes | quietPeriod | retry | skipDefaultCheckout | skipStagesAfterUnstable | timeout | timestamps | parallelsAlwaysFailFast | disableRestartFromStage
+private buildDiscarder ::= 'buildDiscarder' '(' ')'
+private checkoutToSubdirectory ::= 'checkoutToSubdirectory' '(' string ')'
+private disableConcurrentBuilds ::= 'disableConcurrentBuilds' '(' ')'
+private disableResume ::= 'disableResume' '(' ')'
+private newContainerPerStage ::= 'newContainerPerStage'
+private overrideIndexTriggers ::= 'overrideIndexTriggers' '(' boolean ')'
+private preserveStashes ::= 'preserveStashes' '(' ')'
+private quietPeriod ::= 'quietPeriod' '(' number ')'
+private retry ::= 'retry' '(' number ')'
+private skipDefaultCheckout ::= 'skipDefaultCheckout' '(' ')'
+private skipStagesAfterUnstable ::= 'skipStagesAfterUnstable' '(' ')'
+private timeout ::= 'timeout' '(' ')'
+private timestamps ::= 'timestamps' '(' ')'
+private parallelsAlwaysFailFast ::= 'parallelsAlwaysFailFast' '(' ')'
+private disableRestartFromStage ::= 'disableRestartFromStage' '(' ')'
+
+private tools ::= 'tools' '{' toolsDefinition* '}'
+private toolsDefinition ::= 'maven' string | 'jdk' string | 'gradle' string
+
+//private input ::= '{' inputDefinition* '}'
+//private inputDefinition ::= 'message' string | 'id' string | 'ok' string | 'submitter' string | 'submitterParameter' string | parameters
+
+private parameters ::= '{' parametersDefinition* '}'
+private parametersDefinition ::= stringParam | text | booleanParam | choice | password
+private stringParam ::= 'string' '(' ')'
+private text ::= 'text' '(' ')'
+private booleanParam ::= 'booleanParam' '(' ')'
+private choice ::= 'choice' '(' ')'
+private password ::= 'password' '(' ')'
+
+
+// variables
+customWorkspace ::= 'customWorkspace' string
+label ::= 'label' string
+args ::= 'args' string
+registryUrl ::= 'registryUrl' string
+registryCredentialsId ::= 'registryCredentialsId' string
+reuseNode ::= 'reuseNode' boolean
+boolean ::= 'true' | 'false'
+image ::= 'image' string
+dir ::= 'dir' string
+filename ::= 'filename' string
+additionalBuildArgs ::= 'additionalBuildArgs' string
+defaultContainer ::= 'defaultContainer' string
+yaml ::= 'yaml' string
+agentLiteral ::= 'any' | 'none'
+
+
