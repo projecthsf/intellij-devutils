@@ -28,8 +28,8 @@ public class ApplyDatasetActionGroup  extends DefaultActionGroup {
     @Override
     public AnAction @NotNull [] getChildren(AnActionEvent e) {
         List<AnAction> actions = new ArrayList<>();
-        actions.add(new ApplyDataSetAsDatasetAction("Copy as dataset", AllIcons.FileTypes.Csv));
-        actions.add(new ApplyDataSetAsCodeTemplateAction("Copy as code template", AllIcons.Nodes.Template));
+        actions.add(new ApplyDataSetAsDatasetAction("Copy as dataset", null));
+        actions.add(new ApplyDataSetAsCodeTemplateAction("Copy as code template",null));
         return actions.toArray(new AnAction[0]);
     }
 }
