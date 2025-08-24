@@ -18,9 +18,9 @@ repositories {
 
 dependencies {
   implementation("com.opencsv:opencsv:5.12.0")
-  //implementation("com.github.jsqlparser", "jsqlparser", "5.3")
+  implementation("com.github.jsqlparser", "jsqlparser", "5.3")
   intellijPlatform {
-    intellijIdeaCommunity("2024.2.6")
+    intellijIdeaCommunity("2024.1.1")
     //pycharmCommunity("2024.2.6")
     //datagrip("2025.1.3")
     //bundledPlugin("com.jetbrains.python")
@@ -32,7 +32,7 @@ intellijPlatform {
 
   pluginConfiguration {
     ideaVersion {
-      sinceBuild = "242"
+      sinceBuild = "241"
     }
   }
   pluginVerification  {
