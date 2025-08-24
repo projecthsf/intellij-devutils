@@ -16,12 +16,11 @@ public class DevUtilsToolWindowFactory implements ToolWindowFactory, DumbAware {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         toolWindow.getContentManager().addContent(createContent("Apply Dataset", new ApplyDatasetWindowPanel(toolWindow)));
-        toolWindow.getContentManager().addContent(createContent("Sql to DTO", new SqlToDTOWindowPanel(toolWindow)));
+        //toolWindow.getContentManager().addContent(createContent("Sql to DTO", new SqlToDTOWindowPanel(toolWindow)));
     }
 
 
     private Content createContent(String name, JPanel panel) {
         return ContentFactory.getInstance().createContent(panel, name, false);
     }
-
 }
