@@ -20,7 +20,6 @@ import com.intellij.testFramework.LightVirtualFile;
 import com.intellij.util.ui.JBUI;
 import io.github.projecthsf.devutils.enums.LanguageEnum;
 import io.github.projecthsf.devutils.enums.NameCaseEnum;
-import io.github.projecthsf.devutils.languages.sql.SqlSyntaxHighlighter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
