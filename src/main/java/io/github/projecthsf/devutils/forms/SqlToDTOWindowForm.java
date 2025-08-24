@@ -10,7 +10,6 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.FormBuilder;
 import io.github.projecthsf.devutils.enums.LanguageEnum;
-import io.github.projecthsf.devutils.languages.sql.SqlFileType;
 import io.github.projecthsf.devutils.utils.ActionUtil;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 import org.jetbrains.annotations.NotNull;
@@ -126,5 +125,3 @@ public class SqlToDTOWindowForm extends JPanel {
         }
     }
 }
-
-
