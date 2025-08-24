@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public abstract class CommonToDTOAction extends AnAction {
-    ToDTOForm form = new ToDTOForm();
+    ToDTOForm form;
     StateComponent.State settings = Objects.requireNonNull(StateComponent.getInstance().getState());
     VelocityService.TableDTO tableDTO;
     String title;
@@ -44,6 +44,7 @@ public abstract class CommonToDTOAction extends AnAction {
         Caret caret = ActionUtil.getSelectedCaret(event);
         assert caret.getSelectedText() != null;
 
+        form = new ToDTOForm();
         try {
             tableDTO = getTableDTO(caret.getSelectedText());
         } catch (Exception e) {
