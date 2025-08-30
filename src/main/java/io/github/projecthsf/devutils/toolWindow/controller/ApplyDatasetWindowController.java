@@ -10,11 +10,10 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
-import io.github.projecthsf.devutils.enums.LanguageEnum;
 import io.github.projecthsf.devutils.enums.NameCaseEnum;
 import io.github.projecthsf.devutils.forms.ApplyDatasetWindowForm;
-import io.github.projecthsf.devutils.service.VelocityService;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
+import io.github.projecthsf.devutils.utils.NameCaseUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -22,6 +21,9 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplyDatasetWindowController extends JPanel {
     @NotNull ToolWindow toolWindow;
@@ -65,8 +67,32 @@ public class ApplyDatasetWindowController extends JPanel {
     }
 
     String getPreviewString() {
-        return ApplyDatasetUtil.getPreviewString(form.getDataSet(), form.getTemplateCode());
+        CSVParser parser = new CSVParserBuilder().withSeparator(form.getSeparator().getSeparator()).build();
+        List<String> previewData = new ArrayList<>();
+        try (StringReader reader = new StringReader(form.getDataSet())) {
+            CSVReader csvReader = new CSVReaderBuilder(reader).withCSVParser(parser).build();
+            String[] columns;
+            while ((columns = csvReader.readNext()) != null) {
+                previewData.add(getAppliedString(form.getTemplateCode(), columns));
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+        return Strings.join(previewData, "\n");
 
+    }
+
+    private String getAppliedString(String codeTemplate, String[] values) {
+        int i = 0;
+        for (String value: values) {
+            for (NameCaseEnum nameCase: NameCaseEnum.values()) {
+                codeTemplate = codeTemplate.replace(String.format("${%s.%s}", i, nameCase.getCode()), NameCaseUtil.toNameCase(nameCase, value));
+            }
+            codeTemplate = codeTemplate.replace(String.format("${%s}", i), value);
+            codeTemplate = codeTemplate.replace(String.format("$%s", i), value);
+            i++;
+        }
+        return codeTemplate;
     }
 
     public static class ApplyButtonActionListener implements ActionListener {
