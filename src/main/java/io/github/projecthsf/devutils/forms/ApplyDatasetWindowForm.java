@@ -2,7 +2,6 @@ package io.github.projecthsf.devutils.forms;
 
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.ui.ComboBox;
@@ -13,11 +12,9 @@ import io.github.projecthsf.devutils.enums.CsvSeparatorEnum;
 import io.github.projecthsf.devutils.enums.LanguageEnum;
 import io.github.projecthsf.devutils.utils.ActionUtil;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ApplyDatasetWindowForm extends JPanel {
@@ -52,7 +49,7 @@ public class ApplyDatasetWindowForm extends JPanel {
         return dataSet.getDocument().getText();
     }
 
-    public CsvSeparatorEnum getSeparartor() {
+    public CsvSeparatorEnum getSeparator() {
         return (CsvSeparatorEnum) separartor.getSelectedItem();
     }
 
