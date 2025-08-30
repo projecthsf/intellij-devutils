@@ -5,7 +5,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
-import io.github.projecthsf.devutils.toolWindow.contents.ApplyDatasetWindowPanel;
+import io.github.projecthsf.devutils.toolWindow.controller.ApplyDatasetWindowController;
 import io.github.projecthsf.devutils.utils.ActionUtil;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ public class ApplyDataSetAsDatasetAction extends AnAction {
         assert toolWindow != null;
         toolWindow.show();
 
-        ApplyDatasetWindowPanel toolWindowPanel = ApplyDatasetUtil.getToolWindowPanel(toolWindow);
+        ApplyDatasetWindowController toolWindowPanel = ApplyDatasetUtil.getToolWindowPanel(toolWindow);
         assert toolWindowPanel != null;
 
         toolWindowPanel.updateDataSet(caret.getSelectedText());
