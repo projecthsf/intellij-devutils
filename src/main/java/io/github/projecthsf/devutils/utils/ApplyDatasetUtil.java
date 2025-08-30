@@ -4,9 +4,11 @@ import com.intellij.icons.AllIcons;
 import com.intellij.ide.HelpTooltip;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.content.Content;
-import com.opencsv.CSVReader;
+import com.opencsv.*;
+import io.github.projecthsf.devutils.enums.CsvSeparatorEnum;
 import io.github.projecthsf.devutils.enums.NameCaseEnum;
-import io.github.projecthsf.devutils.toolWindow.contents.ApplyDatasetWindowPanel;
+import io.github.projecthsf.devutils.service.VelocityService;
+import io.github.projecthsf.devutils.toolWindow.controller.ApplyDatasetWindowController;
 import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
@@ -14,7 +16,9 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ApplyDatasetUtil {
     public static final String DEFAULT_TEMPLATE_NAME = "DEFAULT";
@@ -71,9 +75,9 @@ public class ApplyDatasetUtil {
         return button;
     }
 
-    public static ApplyDatasetWindowPanel getToolWindowPanel(ToolWindow toolWindow) {
+    public static ApplyDatasetWindowController getToolWindowPanel(ToolWindow toolWindow) {
         for (Content content: toolWindow.getContentManager().getContents()) {
-            if (content.getComponent() instanceof ApplyDatasetWindowPanel toolWindowPanel) {
+            if (content.getComponent() instanceof ApplyDatasetWindowController toolWindowPanel) {
                 return toolWindowPanel;
             }
         }
