@@ -1,9 +1,20 @@
 package io.github.projecthsf.devutils.toolWindow.controller;
 
 import com.intellij.openapi.editor.Caret;
+import com.intellij.openapi.editor.event.DocumentEvent;
+import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.ide.CopyPasteManager;
+import com.intellij.openapi.util.text.Strings;
 import com.intellij.openapi.wm.ToolWindow;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import io.github.projecthsf.devutils.enums.LanguageEnum;
+import io.github.projecthsf.devutils.enums.NameCaseEnum;
 import io.github.projecthsf.devutils.forms.ApplyDatasetWindowForm;
+import io.github.projecthsf.devutils.service.VelocityService;
+import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -13,13 +24,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ApplyDatasetWindowController extends JPanel {
-    private @NotNull ToolWindow toolWindow;
-    private ApplyDatasetWindowForm form = new ApplyDatasetWindowForm(new ApplyDatasetWindowForm.Request(toolWindow));
+    @NotNull ToolWindow toolWindow;
+    ApplyDatasetWindowForm form = new ApplyDatasetWindowForm(new ApplyDatasetWindowForm.Request(toolWindow));
     public ApplyDatasetWindowController(@NotNull ToolWindow toolWindow) {
         this.toolWindow = toolWindow;
         setLayout(new BorderLayout());
         add(form, BorderLayout.CENTER);
         add(getControlPanel(), BorderLayout.SOUTH);
+
+        form.addListeners(
+                new TextAreaDocumentListener(this),
+                new TextAreaDocumentListener(this),
+                new ComboBoxListener(this)
+        );
     }
 
     private JPanel getControlPanel() {
@@ -47,6 +64,11 @@ public class ApplyDatasetWindowController extends JPanel {
         form.updateDataSet(text);
     }
 
+    String getPreviewString() {
+        return ApplyDatasetUtil.getPreviewString(form.getDataSet(), form.getTemplateCode());
+
+    }
+
     public static class ApplyButtonActionListener implements ActionListener {
         private final ApplyDatasetWindowForm form;
         ApplyButtonActionListener(ApplyDatasetWindowForm form) {
@@ -56,6 +78,31 @@ public class ApplyDatasetWindowController extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             CopyPasteManager.getInstance().setContents(new StringSelection(form.getPreview()));
+        }
+    }
+
+    static class ComboBoxListener implements ActionListener {
+        private ApplyDatasetWindowController controller;
+        ComboBoxListener(ApplyDatasetWindowController controller) {
+            this.controller = controller;
+        }
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String preview = controller.getPreviewString();
+            controller.form.updatePreview(preview);
+        }
+    }
+
+    static class TextAreaDocumentListener implements DocumentListener {
+        private ApplyDatasetWindowController controller;
+        TextAreaDocumentListener(ApplyDatasetWindowController controller) {
+            this.controller = controller;
+        }
+
+        @Override
+        public void documentChanged(@NotNull DocumentEvent event) {
+            String preview = controller.getPreviewString();
+            controller.form.updatePreview(preview);
         }
     }
 }
