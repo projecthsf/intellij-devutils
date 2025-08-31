@@ -16,6 +16,7 @@ import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class VelocityService {
     private static VelocityEngine velocityEngine;
@@ -49,6 +50,18 @@ public class VelocityService {
         StringWriter writer = new StringWriter();
         template.merge(context, writer);
 
+        return writer.toString();
+    }
+
+    public String merge(List<Map<Object, String>> properties, String templateString) {
+        repo.putStringResource("FROM_TEMPLATE_STRING", templateString);
+        Template template = velocityEngine.getTemplate("FROM_TEMPLATE_STRING");
+        VelocityContext context = new VelocityContext();
+        context.put("NameCaseUtil", NameCaseUtil.class);
+        context.put("properties", properties);
+
+        StringWriter writer = new StringWriter();
+        template.merge(context, writer);
         return writer.toString();
     }
 
