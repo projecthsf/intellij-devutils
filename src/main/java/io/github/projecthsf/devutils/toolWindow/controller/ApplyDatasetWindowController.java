@@ -12,6 +12,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import io.github.projecthsf.devutils.enums.NameCaseEnum;
 import io.github.projecthsf.devutils.forms.ApplyDatasetWindowForm;
+import io.github.projecthsf.devutils.service.VelocityService;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 import io.github.projecthsf.devutils.utils.NameCaseUtil;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.StringReader;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 public class ApplyDatasetWindowController extends JPanel {
@@ -35,8 +36,8 @@ public class ApplyDatasetWindowController extends JPanel {
         add(getControlPanel(), BorderLayout.SOUTH);
 
         form.addListeners(
-                new TextAreaDocumentListener(this),
-                new TextAreaDocumentListener(this),
+                new TextAreaDocumentListener(this, true),
+                new TextAreaDocumentListener(this, false),
                 new ComboBoxListener(this)
         );
     }
@@ -66,32 +67,29 @@ public class ApplyDatasetWindowController extends JPanel {
         form.updateDataSet(text);
     }
 
-    String getPreviewString() {
-        CSVParser parser = new CSVParserBuilder().withSeparator(form.getSeparator().getSeparator()).build();
-        List<String> previewData = new ArrayList<>();
-        try (StringReader reader = new StringReader(form.getDataSet())) {
-            CSVReader csvReader = new CSVReaderBuilder(reader).withCSVParser(parser).build();
-            String[] columns;
-            while ((columns = csvReader.readNext()) != null) {
-                previewData.add(getAppliedString(form.getTemplateCode(), columns));
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+    String getPreviewString(boolean updateDataset) {
+        if (form.getDataSet().isEmpty() || form.getTemplateCode().isEmpty()) {
+            return "";
         }
-        return Strings.join(previewData, "\n");
+        VelocityService service = VelocityService.getInstance();
+        ApplyDatasetUtil.DatatsetDTO dto = ApplyDatasetUtil.getDatasetRecords(form.getSeparator(), form.getDataSet(), updateDataset);
 
-    }
-
-    private String getAppliedString(String codeTemplate, String[] values) {
-        int i = 0;
-        for (String value: values) {
-            for (NameCaseEnum nameCase: NameCaseEnum.values()) {
-                codeTemplate = codeTemplate.replace(String.format("${%s.%s}", i, nameCase.getCode()), NameCaseUtil.toNameCase(nameCase, value));
+        String codeTemplate = form.getTemplateCode();
+        for (Map<String, String> map: dto.getSimplify()) {
+            for (String key: map.keySet()) {
+                codeTemplate = codeTemplate.replace(key, map.get(key));
             }
-            codeTemplate = codeTemplate.replace(String.format("${%s}", i), value);
-            codeTemplate = codeTemplate.replace(String.format("$%s", i), value);
-            i++;
         }
+
+        try {
+            codeTemplate = service.merge(
+                    dto.getVelocity(),
+                    String.format("#foreach($cols in $properties)%s\n#end", codeTemplate)
+            );
+        } catch (Exception e) {
+            //
+        }
+
         return codeTemplate;
     }
 
@@ -114,20 +112,22 @@ public class ApplyDatasetWindowController extends JPanel {
         }
         @Override
         public void actionPerformed(ActionEvent e) {
-            String preview = controller.getPreviewString();
+            String preview = controller.getPreviewString(true);
             controller.form.updatePreview(preview);
         }
     }
 
     static class TextAreaDocumentListener implements DocumentListener {
         private ApplyDatasetWindowController controller;
-        TextAreaDocumentListener(ApplyDatasetWindowController controller) {
+        private final boolean updateDataset;
+        TextAreaDocumentListener(ApplyDatasetWindowController controller, boolean updateDataset) {
             this.controller = controller;
+            this.updateDataset = updateDataset;
         }
 
         @Override
         public void documentChanged(@NotNull DocumentEvent event) {
-            String preview = controller.getPreviewString();
+            String preview = controller.getPreviewString(updateDataset);
             controller.form.updatePreview(preview);
         }
     }
