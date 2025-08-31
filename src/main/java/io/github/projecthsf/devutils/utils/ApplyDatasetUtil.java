@@ -21,6 +21,20 @@ import java.util.List;
 import java.util.Map;
 
 public class ApplyDatasetUtil {
+    private static DatatsetDTO dto;
+    public static class DatatsetDTO {
+        private List<Map<Object, String>> velocity = new ArrayList<>();
+        private List<Map<String, String>> simplify = new ArrayList<>();
+
+        public List<Map<Object, String>> getVelocity() {
+            return velocity;
+        }
+
+        public List<Map<String, String>> getSimplify() {
+            return simplify;
+        }
+    }
+
     public static final String DEFAULT_TEMPLATE_NAME = "DEFAULT";
     public static String getPreviewString(String dataList, String templateCode) {
         List<String> previewData = new ArrayList<>();
@@ -47,6 +61,54 @@ public class ApplyDatasetUtil {
         }
 
         return codeTemplate;
+    }
+
+    public static DatatsetDTO getDatasetRecords(CsvSeparatorEnum separator, String dataset, boolean forceUpdate) {
+        if (dto != null && !forceUpdate) {
+            return dto;
+        }
+
+        dto = new DatatsetDTO();
+        CSVParser parser = new CSVParserBuilder().withSeparator(separator.getSeparator()).build();
+        try (StringReader reader = new StringReader(dataset)) {
+            CSVReader csvReader = new CSVReaderBuilder(reader).withCSVParser(parser).build();
+            String[] columns;
+            while ((columns = csvReader.readNext()) != null) {
+                getDatasetRecord(dto, columns);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
+        return dto;
+    }
+
+    private static void getDatasetRecord(DatatsetDTO dto, String[] values) {
+        Map<Object, String> velocity = new HashMap<>();
+        Map<String, String> simplify = new HashMap<>();
+
+        int i = 0;
+        for (String value: values) {
+            // velocity keys
+            velocity.put(i, value); // int i => value
+            velocity.put(String.format("%s", i), value); // string i => value
+
+            // simple keys
+            simplify.put(String.format("${%s}", i), value); // string ${i} => value
+            simplify.put(String.format("$%s", i), value); // string $i => value
+
+            for (NameCaseEnum nameCase: NameCaseEnum.values()) {
+                // velocity keys
+                velocity.put(String.format("%s.%s", i, nameCase.getCode()), NameCaseUtil.toNameCase(nameCase, value)); // string i.nameCase
+
+                // simple keys
+                simplify.put(String.format("${%s.%s}", i, nameCase.getCode()), NameCaseUtil.toNameCase(nameCase, value)); // string ${i.nameCase}
+            }
+            i++;
+        }
+
+        dto.getVelocity().add(velocity);
+        dto.getSimplify().add(simplify);
     }
 
     public static String getTemplate(String templateName) {
