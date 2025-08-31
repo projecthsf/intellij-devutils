@@ -1,11 +1,13 @@
 package io.github.projecthsf.devutils.forms;
 
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.ui.components.ActionLink;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.FormBuilder;
 import io.github.projecthsf.devutils.enums.CsvSeparatorEnum;
@@ -15,6 +17,7 @@ import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ApplyDatasetWindowForm extends JPanel {
@@ -81,19 +84,31 @@ public class ApplyDatasetWindowForm extends JPanel {
 
     private JPanel getCenterPanel() {
         String datasetTooltipMsg = ApplyDatasetUtil.getTemplate("templates/dataset-tooltip.html");
-        String codeTemplateTooltipMsg = ApplyDatasetUtil.getTemplate("templates/code-template-tooltip.html");
-
-        JButton dataSetTooltip = ApplyDatasetUtil.getToolTipButton("Data set (CSV)", datasetTooltipMsg);
-        JButton codeTemplateTooltip = ApplyDatasetUtil.getToolTipButton("Code template", codeTemplateTooltipMsg);
-
+        JButton dataSetTooltip = ApplyDatasetUtil.getToolTipButton("Dataset (CSV)", datasetTooltipMsg);
         JPanel datasetPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         datasetPanel.add(dataSetTooltip);
+        datasetPanel.add(new JBLabel("Separator"));
         datasetPanel.add(separartor);
 
+        String codeTemplateTooltipMsg = ApplyDatasetUtil.getTemplate("templates/code-template-tooltip.html");
+        JButton codeTemplateTooltip = ApplyDatasetUtil.getToolTipButton("Code template", codeTemplateTooltipMsg);
+        JPanel codeTemplatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        codeTemplatePanel.add(codeTemplateTooltip);
+        ActionLink link = new ActionLink(
+                "View document",
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        BrowserUtil.browse("https://github.com/projecthsf/intellij-devutils/blob/2-csv-dataset-velocity/docs/apply-dataset/code-template.md");
+                    }
+                }
+        );
+        link.setExternalLinkIcon();
+        codeTemplatePanel.add(link);
         return FormBuilder.createFormBuilder()
                 .addComponent(datasetPanel)
                 .addComponent(ActionUtil.getEditorPanel(dataSet, 400, 180))
-                .addComponent(codeTemplateTooltip)
+                .addComponent(codeTemplatePanel)
                 .addComponent(ActionUtil.getEditorPanel(templateCode, 400, 180))
                 .addComponent(new JBLabel("Result"))
                 .addComponent(ActionUtil.getEditorPanel(preview, 400, 180))
