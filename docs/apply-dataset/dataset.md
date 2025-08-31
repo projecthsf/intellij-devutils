@@ -39,7 +39,7 @@ a|1
 b|2
 </pre>
 
-5Separator: SEMICOLOON
+5. Separator: SEMICOLOON
 <pre>
 a;1
 b;2
