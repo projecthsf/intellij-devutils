@@ -96,4 +96,4 @@ private BigDecimal price;
 </pre>
 
 ## References:
-<a target="_blank" href="https://velocity.apache.org/engine/1.7/user-guide.html#methods">Velocity document</a>
+1. [Apache Velocity document!](https://velocity.apache.org/engine/1.7/user-guide.html#methods)
