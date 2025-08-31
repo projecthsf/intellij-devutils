@@ -53,13 +53,12 @@ public class VelocityService {
         return writer.toString();
     }
 
-    public String merge(List<Map<Object, String>> properties, String templateString) {
+    public String merge(Map<Object, String> cols, String templateString) {
         repo.putStringResource("FROM_TEMPLATE_STRING", templateString);
         Template template = velocityEngine.getTemplate("FROM_TEMPLATE_STRING");
         VelocityContext context = new VelocityContext();
         context.put("NameCaseUtil", NameCaseUtil.class);
-        context.put("properties", properties);
-
+        context.put("cols", cols);
         StringWriter writer = new StringWriter();
         template.merge(context, writer);
         return writer.toString();
