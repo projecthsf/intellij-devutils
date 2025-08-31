@@ -21,16 +21,16 @@ import java.util.List;
 import java.util.Map;
 
 public class ApplyDatasetUtil {
-    private static DatatsetDTO dto;
+    private static List<DatatsetDTO> records;
     public static class DatatsetDTO {
-        private List<Map<Object, String>> velocity = new ArrayList<>();
-        private List<Map<String, String>> simplify = new ArrayList<>();
+        private Map<Object, String> velocity = new HashMap<>();
+        private Map<String, String> simplify = new HashMap<>();
 
-        public List<Map<Object, String>> getVelocity() {
+        public Map<Object, String> getVelocity() {
             return velocity;
         }
 
-        public List<Map<String, String>> getSimplify() {
+        public Map<String, String> getSimplify() {
             return simplify;
         }
     }
@@ -63,52 +63,50 @@ public class ApplyDatasetUtil {
         return codeTemplate;
     }
 
-    public static DatatsetDTO getDatasetRecords(CsvSeparatorEnum separator, String dataset, boolean forceUpdate) {
-        if (dto != null && !forceUpdate) {
-            return dto;
+    public static List<DatatsetDTO> getDatasetRecords(CsvSeparatorEnum separator, String dataset, boolean forceUpdate) {
+        if (records != null && !forceUpdate) {
+            return records;
         }
 
-        dto = new DatatsetDTO();
+        records = new ArrayList<>();
         CSVParser parser = new CSVParserBuilder().withSeparator(separator.getSeparator()).build();
         try (StringReader reader = new StringReader(dataset)) {
             CSVReader csvReader = new CSVReaderBuilder(reader).withCSVParser(parser).build();
             String[] columns;
             while ((columns = csvReader.readNext()) != null) {
-                getDatasetRecord(dto, columns);
+                records.add(getDatasetRecord(columns));
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
 
-        return dto;
+        return records;
     }
 
-    private static void getDatasetRecord(DatatsetDTO dto, String[] values) {
-        Map<Object, String> velocity = new HashMap<>();
-        Map<String, String> simplify = new HashMap<>();
+    private static DatatsetDTO getDatasetRecord(String[] values) {
+        DatatsetDTO dto = new DatatsetDTO();
 
         int i = 0;
         for (String value: values) {
             // velocity keys
-            velocity.put(i, value); // int i => value
-            velocity.put(String.format("%s", i), value); // string i => value
+            dto.getVelocity().put(i, value); // int i => value
+            dto.getVelocity().put(String.format("%s", i), value); // string i => value
 
             // simple keys
-            simplify.put(String.format("${%s}", i), value); // string ${i} => value
-            simplify.put(String.format("$%s", i), value); // string $i => value
+            dto.getSimplify().put(String.format("${%s}", i), value); // string ${i} => value
+            dto.getSimplify().put(String.format("$%s", i), value); // string $i => value
 
             for (NameCaseEnum nameCase: NameCaseEnum.values()) {
                 // velocity keys
-                velocity.put(String.format("%s.%s", i, nameCase.getCode()), NameCaseUtil.toNameCase(nameCase, value)); // string i.nameCase
+                dto.getVelocity().put(String.format("%s.%s", i, nameCase.getCode()), NameCaseUtil.toNameCase(nameCase, value)); // string i.nameCase
 
                 // simple keys
-                simplify.put(String.format("${%s.%s}", i, nameCase.getCode()), NameCaseUtil.toNameCase(nameCase, value)); // string ${i.nameCase}
+                dto.getSimplify().put(String.format("${%s.%s}", i, nameCase.getCode()), NameCaseUtil.toNameCase(nameCase, value)); // string ${i.nameCase}
             }
             i++;
         }
 
-        dto.getVelocity().add(velocity);
-        dto.getSimplify().add(simplify);
+        return dto;
     }
 
     public static String getTemplate(String templateName) {
