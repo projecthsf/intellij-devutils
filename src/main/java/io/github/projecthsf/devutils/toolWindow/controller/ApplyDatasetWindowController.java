@@ -72,24 +72,28 @@ public class ApplyDatasetWindowController extends JPanel {
             return "";
         }
         VelocityService service = VelocityService.getInstance();
-        ApplyDatasetUtil.DatatsetDTO dto = ApplyDatasetUtil.getDatasetRecords(form.getSeparator(), form.getDataSet(), updateDataset);
+        List<ApplyDatasetUtil.DatatsetDTO> dtos = ApplyDatasetUtil.getDatasetRecords(form.getSeparator(), form.getDataSet(), updateDataset);
 
+
+        List<String> items = new ArrayList<>();
+        for (ApplyDatasetUtil.DatatsetDTO dto: dtos) {
+            items.add(getPreviewString(service, dto));
+        }
+
+        return Strings.join(items, "\n");
+    }
+
+    private String getPreviewString(VelocityService service, ApplyDatasetUtil.DatatsetDTO dto) {
         String codeTemplate = form.getTemplateCode();
-        for (Map<String, String> map: dto.getSimplify()) {
-            for (String key: map.keySet()) {
-                codeTemplate = codeTemplate.replace(key, map.get(key));
-            }
+        for (String key: dto.getSimplify().keySet()) {
+            codeTemplate = codeTemplate.replace(key, dto.getSimplify().get(key));
         }
 
         try {
-            codeTemplate = service.merge(
-                    dto.getVelocity(),
-                    String.format("#foreach($cols in $properties)%s\n#end", codeTemplate)
-            );
+            codeTemplate = service.merge(dto.getVelocity(), codeTemplate);
         } catch (Exception e) {
-            //
-        }
 
+        }
         return codeTemplate;
     }
 
