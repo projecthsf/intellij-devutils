@@ -78,6 +78,10 @@ public class ApplyDatasetWindowForm extends JPanel {
         ActionUtil.updateText(dataSet, text);
     }
 
+    public void updateCodeTemplate(String text) {
+        ActionUtil.updateText(templateCode, text);
+    }
+
     public void updateCodeTemplate(Caret caret) {
         ActionUtil.updateText(templateCode, caret.getSelectedText());
     }
