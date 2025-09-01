@@ -16,6 +16,13 @@
     <description>
         <![CDATA[
     <ol>
+        <li>V1.1.0<br />
+            <ul>
+                <li>Add Generate setting, allow to show on/off group/actions<li>
+                <li>Apply Apache Velocity to Apply Dataset code template</li>
+                <li>Add dataset csv separator</li>
+            </ul>
+        </li>
       <li>V1.0.0<br />
         <p>- Apply with dataset: Allow you apply a piece of code to dataset, its helpful for create DTO converters</p>
 
