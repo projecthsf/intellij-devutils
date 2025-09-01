@@ -36,3 +36,4 @@ public class ApplyDataSetAsDatasetAction extends CommonAction {
         toolWindowPanel.updateDataSet(caret.getSelectedText());
     }
 }
+
