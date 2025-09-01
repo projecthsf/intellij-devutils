@@ -4,9 +4,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import io.github.projecthsf.devutils.enums.JsonDataTypeEnum;
-import io.github.projecthsf.devutils.enums.LanguageEnum;
-import io.github.projecthsf.devutils.enums.SqlDataTypeEnum;
+import io.github.projecthsf.devutils.enums.*;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,6 +26,7 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
     public static class State {
         private  Map<LanguageEnum, Map<String, String>> dataTypeMap = new HashMap<>();
         private final Map<String, String> dtoTemplateMap = new HashMap<>();
+        private  Map<ActionGroupEnum, Map<ActionEnum, Boolean>> actionAndGroupMap = new HashMap<>();
 
         State() {
             String defaultTemplate = ApplyDatasetUtil.getTemplate("templates/java-dto-template.tpl");
@@ -42,6 +41,14 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
             for (JsonDataTypeEnum dataType: JsonDataTypeEnum.values()) {
                 dataTypeMap.get(LanguageEnum.JSON).put(dataType.getSourceDataType(), dataType.getTargetDataType());
             }
+
+            for (ActionEnum action: ActionEnum.values()) {
+                if (!actionAndGroupMap.containsKey(action.getGroup())) {
+                    actionAndGroupMap.put(action.getGroup(), new HashMap<>());
+                }
+
+                actionAndGroupMap.get(action.getGroup()).put(action, true);
+            }
         }
 
         public Map<String, String> getDataTypeMap(LanguageEnum language) {
@@ -55,6 +62,11 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
         public Map<String, String> getDtoTemplateMap() {
             return dtoTemplateMap;
         }
+
+        public Map<ActionGroupEnum, Map<ActionEnum, Boolean>> getActionAndGroupMap() {
+            return actionAndGroupMap;
+        }
+
     }
 
     private State myState = new State();
