@@ -29,14 +29,14 @@ public class StringsActionGroup extends DefaultActionGroup {
     @Override
     public AnAction @NotNull [] getChildren(AnActionEvent e) {
         List<AnAction> actions = new ArrayList<>();
-        actions.add(new GetLengthAction("Get length", null));
-        actions.add(new StringSplitAction("Split to multi line", null));
-        actions.add(new StringJoinAction("Join to one line", null));
-        actions.add(new RemoveHtmlTagsAction("Remove HTML tags", AllIcons.General.Remove));
-        actions.add(new StringWrapQuoteAction("Wrap line with quote", null));
-        actions.add(new StringToggleQuoteAction("Toggle quotes", null));
-        actions.add(new RemoveQuotesAction("Remove quotes", null));
-        actions.add(new StringListAction("Make string list", null));
+        actions.add(new GetLengthAction());
+        actions.add(new StringSplitAction());
+        actions.add(new StringJoinAction());
+        actions.add(new RemoveHtmlTagsAction());
+        actions.add(new StringWrapQuoteAction());
+        actions.add(new StringToggleQuoteAction());
+        actions.add(new RemoveQuotesAction());
+        actions.add(new StringListAction());
         return actions.toArray(new AnAction[0]);
     }
 }
