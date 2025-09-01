@@ -7,8 +7,8 @@ import javax.swing.*;
 public enum ActionEnum {
     APPLY_DATA_SET_AS_CODE_TEMPLATE("Copy as code template", null, ActionGroupEnum.APPLY_DATASET),
     APPLY_DATA_SET_AS_DATASET("Copy as dataset", null, ActionGroupEnum.APPLY_DATASET),
-    SQL_TO_DTO("SQL to DTO", AllIcons.FileTypes.Jsp, ActionGroupEnum.CONVERTERS),
-    JSON_TO_DTO("JSON to DTO", AllIcons.Nodes.DataSchema, ActionGroupEnum.CONVERTERS),
+    SQL_TO_DTO("SQL to DTO", AllIcons.Nodes.DataSchema, ActionGroupEnum.CONVERTERS),
+    JSON_TO_DTO("JSON to DTO", AllIcons.FileTypes.Json, ActionGroupEnum.CONVERTERS),
     NAME_CASE("Switch name cases between camel case/ snake case/...", null, ActionGroupEnum.NAME_CASE),
     GET_LENGTH("Get length", null, ActionGroupEnum.STRING_UTILS),
     REMOVE_HTML_TAGS("Remove HTML tags", null, ActionGroupEnum.STRING_UTILS),
