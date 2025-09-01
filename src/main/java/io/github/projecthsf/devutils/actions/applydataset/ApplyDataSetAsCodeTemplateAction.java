@@ -5,6 +5,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
+import io.github.projecthsf.devutils.actions.CommonAction;
+import io.github.projecthsf.devutils.enums.ActionEnum;
 import io.github.projecthsf.devutils.toolWindow.controller.ApplyDatasetWindowController;
 import io.github.projecthsf.devutils.utils.ActionUtil;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
@@ -13,9 +15,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class ApplyDataSetAsCodeTemplateAction extends AnAction {
-    ApplyDataSetAsCodeTemplateAction(@NotNull String text, @Nullable Icon icon) {
-        super(text, "", icon);
+public class ApplyDataSetAsCodeTemplateAction extends CommonAction {
+    ApplyDataSetAsCodeTemplateAction() {
+        super(ActionEnum.APPLY_DATA_SET_AS_CODE_TEMPLATE);
     }
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
