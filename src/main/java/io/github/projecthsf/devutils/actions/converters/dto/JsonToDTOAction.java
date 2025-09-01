@@ -2,6 +2,7 @@ package io.github.projecthsf.devutils.actions.converters.dto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.projecthsf.devutils.enums.ActionEnum;
 import io.github.projecthsf.devutils.enums.JsonDataTypeEnum;
 import io.github.projecthsf.devutils.enums.LanguageEnum;
 import io.github.projecthsf.devutils.service.VelocityService;
@@ -13,10 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 public class JsonToDTOAction extends CommonToDTOAction {
-    public JsonToDTOAction(@NotNull String title, Icon icon) {
-        super(title, icon);
-    }
 
+    public JsonToDTOAction() {
+        super(ActionEnum.JSON_TO_DTO);
+    }
     @Override
     protected VelocityService.TableDTO getTableDTO(String selectedText) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
