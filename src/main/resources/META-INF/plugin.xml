@@ -3,18 +3,18 @@
 
 <idea-plugin>
 
-  <!-- Unique id for this plugin. Must stay constant for the life of the plugin. -->
-  <id>io.github.projecthsf.devutils</id>
+    <!-- Unique id for this plugin. Must stay constant for the life of the plugin. -->
+    <id>io.github.projecthsf.devutils</id>
 
-  <!-- Text to display as name on Settings | Plugin page -->
-  <name>Dev Utils</name>
+    <!-- Text to display as name on Settings | Plugin page -->
+    <name>Dev Utils</name>
 
-  <!-- Indicate this plugin can be loaded in all IntelliJ Platform-based products. -->
-  <depends>com.intellij.modules.platform</depends>
+    <!-- Indicate this plugin can be loaded in all IntelliJ Platform-based products. -->
+    <depends>com.intellij.modules.platform</depends>
 
-  <!-- Text to display as description on Settings | Plugin page -->
-  <description>
-    <![CDATA[
+    <!-- Text to display as description on Settings | Plugin page -->
+    <description>
+        <![CDATA[
     <ol>
       <li>V1.0.0<br />
         <p>- Apply with dataset: Allow you apply a piece of code to dataset, its helpful for create DTO converters</p>
@@ -47,66 +47,75 @@
       </li>
       </ol>
     ]]>
-  </description>
-  <change-notes>
-    <![CDATA[
+    </description>
+    <change-notes>
+        <![CDATA[
       <ul>
         <li><b>1.0.0</b> Initiated</li>
       </ul>
     ]]>
-  </change-notes>
+    </change-notes>
 
-  <!-- Text to display as company information on Settings | Plugin page -->
-  <vendor email="w2ajax@gmail.com" url="https://github.com/projecthsf/go-playground">Jin Nguyen</vendor>
+    <!-- Text to display as company information on Settings | Plugin page -->
+    <vendor email="w2ajax@gmail.com" url="https://github.com/projecthsf/go-playground">Jin Nguyen</vendor>
 
-  <!-- Declare the default resource location for localizing menu strings -->
-  <actions>
+    <!-- Declare the default resource location for localizing menu strings -->
+    <actions>
 
-    <group id="DevUtils.StringUtils" text="String Utils" popup="true" class="io.github.projecthsf.devutils.actions.strings.StringsActionGroup">
-      <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-    </group>
-    <group id="DevUtils.ApplyDataSet" text="Apply With Dataset" popup="true" class="io.github.projecthsf.devutils.actions.applydataset.ApplyDatasetActionGroup">
-      <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-    </group>
+        <group id="DevUtils.StringUtils" text="String Utils" popup="true"
+               class="io.github.projecthsf.devutils.actions.strings.StringsActionGroup">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </group>
+        <group id="DevUtils.ApplyDataSet" text="Apply With Dataset" popup="true"
+               class="io.github.projecthsf.devutils.actions.applydataset.ApplyDatasetActionGroup">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </group>
 
-    <group id="StringUtils.NameCases" text="Name Case Converter" popup="true" description="Provide some string utils" class="io.github.projecthsf.devutils.actions.namecase.NameCaseActionGroup">
-      <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-    </group>
+        <group id="StringUtils.NameCases" text="Name Case Converter" popup="true"
+               description="Provide some string utils"
+               class="io.github.projecthsf.devutils.actions.namecase.NameCaseActionGroup">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </group>
 
-    <group id="StringUtils.Converters" text="Converters" popup="true" description="Provide some string utils" class="io.github.projecthsf.devutils.actions.converters.ConverterActionGroup">
-      <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-    </group>
+        <group id="StringUtils.Converters" text="Converters" popup="true" description="Provide some string utils"
+               class="io.github.projecthsf.devutils.actions.converters.ConverterActionGroup">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </group>
 
-  </actions>
+    </actions>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <applicationConfigurable  instance="io.github.projecthsf.devutils.settings.EmptyConfigurable"
-                              id="DevUtils" displayName="Dev Utils" />
-
-    <applicationConfigurable  instance="io.github.projecthsf.devutils.settings.DtoTemplateConfigurable"
-                              id="DevUtils.DtoTemplate" parentId="DevUtils" displayName="DTO Templates" />
-
-
-    <applicationConfigurable  instance="io.github.projecthsf.devutils.settings.EmptyConfigurable"
-                              id="DevUtils.DataTypeMap" parentId="DevUtils" displayName="Data Type Mapping" />
-    <applicationConfigurable  instance="io.github.projecthsf.devutils.settings.DataTypeMapConfigurable$SqlDataTypeConfigureable"
-                              id="DevUtils.DataTypeMap.Sql" parentId="DevUtils.DataTypeMap" displayName="SQL" />
-
-    <applicationConfigurable  instance="io.github.projecthsf.devutils.settings.DataTypeMapConfigurable$JsonDataTypeConfigureable"
-                              id="DevUtils.DataTypeMap.Json" parentId="DevUtils.DataTypeMap" displayName="JSON" />
-
-    <applicationService serviceImplementation="io.github.projecthsf.devutils.settings.StateComponent"/>
-    <toolWindow id="DevUtils" secondary="true"  doNotActivateOnStart="true" icon="AllIcons.General.ExternalTools" anchor="right"
-                factoryClass="io.github.projecthsf.devutils.toolWindow.DevUtilsToolWindowFactory"/>
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable instance="io.github.projecthsf.devutils.settings.EmptyConfigurable"
+                                 id="DevUtils" displayName="Dev Utils"/>
+        <applicationConfigurable instance="io.github.projecthsf.devutils.settings.GeneralConfigurable"
+                                 id="DevUtils.General" parentId="DevUtils" displayName="General"/>
+        <applicationConfigurable instance="io.github.projecthsf.devutils.settings.DtoTemplateConfigurable"
+                                 id="DevUtils.DtoTemplate" parentId="DevUtils" displayName="DTO Templates"/>
 
 
-  <!-- SQL Language -->
-    <!--
-    <fileType name="SqlFile" implementationClass="io.github.projecthsf.devutils.languages.sql.SqlFileType" fieldName="INSTANCE" language="DevUtilSQL" extensions="devutilsql"/>
-    <lang.parserDefinition language="DevUtilSQL" implementationClass="io.github.projecthsf.devutils.languages.sql.SqlParserDefinition"/>
-    <lang.syntaxHighlighterFactory language="DevUtilSQL" implementationClass="io.github.projecthsf.devutils.languages.sql.SqlSyntaxHighlighterFactory"/>
-    <colorSettingsPage implementation="io.github.projecthsf.devutils.languages.sql.SqlColorSettingsPage" />-->
-  </extensions>
+        <applicationConfigurable instance="io.github.projecthsf.devutils.settings.EmptyConfigurable"
+                                 id="DevUtils.DataTypeMap" parentId="DevUtils" displayName="Data Type Mapping"/>
+        <applicationConfigurable
+                instance="io.github.projecthsf.devutils.settings.DataTypeMapConfigurable$SqlDataTypeConfigureable"
+                id="DevUtils.DataTypeMap.Sql" parentId="DevUtils.DataTypeMap" displayName="SQL"/>
+
+        <applicationConfigurable
+                instance="io.github.projecthsf.devutils.settings.DataTypeMapConfigurable$JsonDataTypeConfigureable"
+                id="DevUtils.DataTypeMap.Json" parentId="DevUtils.DataTypeMap" displayName="JSON"/>
+
+        <applicationService serviceImplementation="io.github.projecthsf.devutils.settings.StateComponent"/>
+        <toolWindow id="DevUtils" secondary="true" doNotActivateOnStart="true" icon="AllIcons.General.ExternalTools"
+                    anchor="right"
+                    factoryClass="io.github.projecthsf.devutils.toolWindow.DevUtilsToolWindowFactory"/>
+
+
+        <!-- SQL Language -->
+        <!--
+        <fileType name="SqlFile" implementationClass="io.github.projecthsf.devutils.languages.sql.SqlFileType" fieldName="INSTANCE" language="DevUtilSQL" extensions="devutilsql"/>
+        <lang.parserDefinition language="DevUtilSQL" implementationClass="io.github.projecthsf.devutils.languages.sql.SqlParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="DevUtilSQL" implementationClass="io.github.projecthsf.devutils.languages.sql.SqlSyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="io.github.projecthsf.devutils.languages.sql.SqlColorSettingsPage" />-->
+    </extensions>
 
 
 </idea-plugin>
