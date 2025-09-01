@@ -11,6 +11,8 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.NamedConfigurable;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.NlsSafe;
+import io.github.projecthsf.devutils.actions.CommonAction;
+import io.github.projecthsf.devutils.enums.ActionEnum;
 import io.github.projecthsf.devutils.forms.ToDTOForm;
 import io.github.projecthsf.devutils.service.VelocityService;
 import io.github.projecthsf.devutils.settings.StateComponent;
@@ -29,14 +31,14 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
 
-public abstract class CommonToDTOAction extends AnAction {
+public abstract class CommonToDTOAction extends CommonAction {
     ToDTOForm form;
     StateComponent.State settings = Objects.requireNonNull(StateComponent.getInstance().getState());
     VelocityService.TableDTO tableDTO;
     String title;
-    public CommonToDTOAction(@NotNull String title, Icon icon) {
-        super(title, "", icon);
-        this.title = title;
+    public CommonToDTOAction(ActionEnum action) {
+        super(action);
+        this.title = action.getTitle();
     }
 
     @Override
