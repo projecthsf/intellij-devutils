@@ -44,7 +44,7 @@ public class DtoTemplateSettingForm extends JPanel {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        BrowserUtil.browse("https://github.com/projecthsf/intellij-devutils/blob/2-csv-dataset-velocity/docs/settings/dto-templates.md");
+                        BrowserUtil.browse("https://github.com/projecthsf/intellij-devutils/blob/main/docs/settings/dto-templates.md");
                     }
                 }
         );
