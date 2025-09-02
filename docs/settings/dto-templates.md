@@ -21,11 +21,19 @@ Base on Apache Velocity
     - type: data type after mapping (Settings > Dev Utils > Data Type Mapping)
     - originalType: original data type that detected from source
   <br />}
-  <p>Example: </p>
+
+<p>Example: </p>
 <pre>
+package org.dev.utils.dto;
+import java.lang.*;
+import java.math.*;
+import java.sql.*;
+public class ${classname}DTO {
 #foreach($property in $properties)
     private ${property.type} ${property.name};
-#end</pre>
+#end
+}
+</pre>
 
 
 ## References:
