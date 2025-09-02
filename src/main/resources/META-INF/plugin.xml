@@ -15,17 +15,9 @@
     <!-- Text to display as description on Settings | Plugin page -->
     <description>
         <![CDATA[
-    <ol>
-        <li>V1.1.0<br />
-            <ul>
-                <li>Add Generate setting, allow to show on/off group/actions<li>
-                <li>Apply Apache Velocity to Apply Dataset code template</li>
-                <li>Add dataset csv separator</li>
-            </ul>
-        </li>
-      <li>V1.0.0<br />
+    <ul>
+      <li>
         <p>- Apply with dataset: Allow you apply a piece of code to dataset, its helpful for create DTO converters</p>
-
         <p>- Name case utils:</p>
         <ul>
           <li> Convert selected to camel case (yourName)</li>
@@ -52,12 +44,19 @@
           <li>Make a list of string (i.e: 1,2,3 -> "1", "2", "3")</li>
         </ul>
       </li>
-      </ol>
+      </ul>
     ]]>
     </description>
     <change-notes>
         <![CDATA[
       <ul>
+        <li>V1.1.0<br />
+            <ul>
+                <li>Add Generate setting, allow to show on/off group/actions<li>
+                <li>Apply Apache Velocity to Apply Dataset code template</li>
+                <li>Add dataset csv separator</li>
+            </ul>
+        </li>
         <li><b>1.0.0</b> Initiated</li>
       </ul>
     ]]>
