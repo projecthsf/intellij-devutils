@@ -120,7 +120,7 @@ public abstract class CommonToDTOAction extends CommonAction {
                     VelocityService service = VelocityService.getInstance();
                     String content = service.merge(action.tableDTO, action.settings.getDtoTemplateMap().get(node.getDisplayName()));
                     action.form.updateForm(
-                            action.tableDTO.getTableName(),
+                            action.tableDTO.getClassName(),
                             node.getDisplayName(),
                             content
                     );
