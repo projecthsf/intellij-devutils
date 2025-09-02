@@ -18,7 +18,7 @@ Base on Apache Velocity
   $property: {
     - name: field name in camel case format
     - originalName: original field name
-    - type: data type after mapping (Settings > Dev Utils > Data Type Mapping)
+    - type: data type after mapping (Settings > Dev Utils > Data Type Mapping > SQL)
     - originalType: original data type that detected from source
   <br />}
 
