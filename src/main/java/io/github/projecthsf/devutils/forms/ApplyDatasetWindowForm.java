@@ -1,26 +1,28 @@
 package io.github.projecthsf.devutils.forms;
 
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.editor.ex.EditorEx;
-import com.intellij.openapi.fileTypes.PlainTextFileType;
+import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.ui.LanguageTextField;
+import com.intellij.ui.components.ActionLink;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.FormBuilder;
-import com.intellij.util.ui.JBUI;
+import io.github.projecthsf.devutils.enums.CsvSeparatorEnum;
 import io.github.projecthsf.devutils.enums.LanguageEnum;
 import io.github.projecthsf.devutils.utils.ActionUtil;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ApplyDatasetWindowForm extends JPanel {
     private final EditorEx dataSet;
+    private final ComboBox<CsvSeparatorEnum> separartor;
     private final Editor templateCode;
     private final Editor preview;
 
@@ -28,10 +30,11 @@ public class ApplyDatasetWindowForm extends JPanel {
         dataSet = ActionUtil.getEditorEx(LanguageEnum.JAVA);
         templateCode = ActionUtil.getEditor("");
         preview = ActionUtil.getEditor("", true);
+        separartor = new ComboBox<>(CsvSeparatorEnum.values());
 
-        dataSet.getDocument().addDocumentListener(new TextAreaDocumentListener(request, this));
-        templateCode.getDocument().addDocumentListener(new TextAreaDocumentListener(request, this));
-
+        //dataSet.getDocument().addDocumentListener(new TextAreaDocumentListener(request, this));
+        //templateCode.getDocument().addDocumentListener(new TextAreaDocumentListener(request, this));
+        //separartor.addActionListener(new ComboBoxListener(request, this));
 
         setLayout(new BorderLayout(0, 20));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 0));
@@ -47,6 +50,16 @@ public class ApplyDatasetWindowForm extends JPanel {
 
     public String getDataSet() {
         return dataSet.getDocument().getText();
+    }
+
+    public CsvSeparatorEnum getSeparator() {
+        return (CsvSeparatorEnum) separartor.getSelectedItem();
+    }
+
+    public void addListeners(DocumentListener dataSetListener, DocumentListener templateCodeListner, ActionListener separatorLister) {
+        dataSet.getDocument().addDocumentListener(dataSetListener);
+        templateCode.getDocument().addDocumentListener(templateCodeListner);
+        separartor.addActionListener(separatorLister);
     }
 
     public String getTemplateCode() {
@@ -65,20 +78,41 @@ public class ApplyDatasetWindowForm extends JPanel {
         ActionUtil.updateText(dataSet, text);
     }
 
+    public void updateCodeTemplate(String text) {
+        ActionUtil.updateText(templateCode, text);
+    }
+
     public void updateCodeTemplate(Caret caret) {
         ActionUtil.updateText(templateCode, caret.getSelectedText());
     }
 
     private JPanel getCenterPanel() {
         String datasetTooltipMsg = ApplyDatasetUtil.getTemplate("templates/dataset-tooltip.html");
-        String codeTemplateToolTip = ApplyDatasetUtil.getTemplate("templates/code-template-tooltip.html");
-        JButton dataSetTooltip = ApplyDatasetUtil.getToolTipButton("Data set (CSV)", datasetTooltipMsg);
-        JButton codeTemplateTooltip = ApplyDatasetUtil.getToolTipButton("Code template", codeTemplateToolTip);
+        JButton dataSetTooltip = ApplyDatasetUtil.getToolTipButton("Dataset (CSV)", datasetTooltipMsg);
+        JPanel datasetPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        datasetPanel.add(dataSetTooltip);
+        datasetPanel.add(new JBLabel("Separator"));
+        datasetPanel.add(separartor);
 
+        String codeTemplateTooltipMsg = ApplyDatasetUtil.getTemplate("templates/code-template-tooltip.html");
+        JButton codeTemplateTooltip = ApplyDatasetUtil.getToolTipButton("Code template", codeTemplateTooltipMsg);
+        JPanel codeTemplatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        codeTemplatePanel.add(codeTemplateTooltip);
+        ActionLink link = new ActionLink(
+                "View document",
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        BrowserUtil.browse("https://github.com/projecthsf/intellij-devutils/blob/main/docs/apply-dataset/code-template.md");
+                    }
+                }
+        );
+        link.setExternalLinkIcon();
+        codeTemplatePanel.add(link);
         return FormBuilder.createFormBuilder()
-                .addComponent(dataSetTooltip)
+                .addComponent(datasetPanel)
                 .addComponent(ActionUtil.getEditorPanel(dataSet, 400, 180))
-                .addComponent(codeTemplateTooltip)
+                .addComponent(codeTemplatePanel)
                 .addComponent(ActionUtil.getEditorPanel(templateCode, 400, 180))
                 .addComponent(new JBLabel("Result"))
                 .addComponent(ActionUtil.getEditorPanel(preview, 400, 180))
@@ -105,24 +139,6 @@ public class ApplyDatasetWindowForm extends JPanel {
 
         public void setCaret(Caret caret) {
             this.caret = caret;
-        }
-    }
-
-    static class TextAreaDocumentListener implements DocumentListener {
-        private Request request;
-        private ApplyDatasetWindowForm form;
-        TextAreaDocumentListener(
-                Request request,
-                ApplyDatasetWindowForm form
-        ) {
-            this.request = request;
-            this.form = form;
-        }
-
-        @Override
-        public void documentChanged(@NotNull DocumentEvent event) {
-            String preview = ApplyDatasetUtil.getPreviewString(form.getDataSet(), form.getTemplateCode());
-            form.updatePreview(preview);
         }
     }
 }
