@@ -23,7 +23,7 @@ Base on Apache Velocity
   <br />}
   <p>Example: </p>
 <pre>
-#foreach(\$property in \$properties)
+#foreach($property in $properties)
     private ${property.type} ${property.name};
 #end</pre>
 
