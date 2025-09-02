@@ -28,12 +28,17 @@ package org.dev.utils.dto;
 import java.lang.*;
 import java.math.*;
 import java.sql.*;
-public class ${classname}DTO {
+// original class name: $originalClassName
+public class ${className}DTO {
 #foreach($property in $properties)
+    // Original type: $property.originalType
+    // Original name: $property.originalName
     private ${property.type} ${property.name};
 #end
 }
 </pre>
+
+![DTO template place holder](https://raw.githubusercontent.com/projecthsf/intellij-devutils/refs/heads/2-csv-dataset-velocity/docs/images/setting-dto-templates.png "Dto Templates")
 
 
 ## References:
