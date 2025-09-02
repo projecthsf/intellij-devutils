@@ -4,8 +4,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.util.text.Strings;
-import io.github.projecthsf.devutils.actions.CommonAction;
-import io.github.projecthsf.devutils.enums.ActionEnum;
 import io.github.projecthsf.devutils.utils.ActionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,9 +12,9 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StringListAction extends CommonAction {
-    StringListAction() {
-        super(ActionEnum.STRING_LIST);
+public class StringListAction extends AnAction {
+    StringListAction(@NotNull String text, @Nullable Icon icon) {
+        super(text, "", icon);
     }
 
     @Override

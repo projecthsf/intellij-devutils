@@ -6,30 +6,30 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.editor.Caret;
-import io.github.projecthsf.devutils.actions.CommonGroupAction;
 import io.github.projecthsf.devutils.actions.strings.*;
-import io.github.projecthsf.devutils.enums.ActionEnum;
-import io.github.projecthsf.devutils.enums.ActionGroupEnum;
-import io.github.projecthsf.devutils.settings.StateComponent;
 import io.github.projecthsf.devutils.utils.ActionUtil;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class ApplyDatasetActionGroup extends CommonGroupAction {
-    ApplyDatasetActionGroup() {
-        super(ActionGroupEnum.APPLY_DATASET);
+public class ApplyDatasetActionGroup  extends DefaultActionGroup {
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.EDT;
+    }
+
+    @Override
+    public void update(@NotNull AnActionEvent event) {
+        Caret caret = ActionUtil.getSelectedCaret(event);
+        event.getPresentation().setVisible(caret.getSelectedText() != null);
     }
 
     @Override
     public AnAction @NotNull [] getChildren(AnActionEvent e) {
         List<AnAction> actions = new ArrayList<>();
-        actions.add(new ApplyDataSetAsDatasetAction());
-        actions.add(new ApplyDataSetAsCodeTemplateAction());
+        actions.add(new ApplyDataSetAsDatasetAction("Copy as dataset", null));
+        actions.add(new ApplyDataSetAsCodeTemplateAction("Copy as code template",null));
         return actions.toArray(new AnAction[0]);
     }
 }
