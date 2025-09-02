@@ -1,10 +1,6 @@
 package io.github.projecthsf.devutils.service;
 
-import io.github.projecthsf.devutils.enums.LanguageEnum;
 import io.github.projecthsf.devutils.enums.NameCaseEnum;
-import io.github.projecthsf.devutils.enums.SqlDataTypeEnum;
-import io.github.projecthsf.devutils.settings.StateComponent;
-import io.github.projecthsf.devutils.utils.DataTypeMappingUtil;
 import io.github.projecthsf.devutils.utils.NameCaseUtil;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -16,6 +12,7 @@ import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class VelocityService {
     private static VelocityEngine velocityEngine;
@@ -38,28 +35,40 @@ public class VelocityService {
         return new VelocityService(repo);
     }
 
-    public String merge(TableDTO dto, String templateString) {
+    public String merge(ClassDTO dto, String templateString) {
         repo.putStringResource("FROM_TEMPLATE_STRING", templateString);
         Template template = velocityEngine.getTemplate("FROM_TEMPLATE_STRING");
         VelocityContext context = new VelocityContext();
         context.put("NameCaseUtil", NameCaseUtil.class);
-        context.put("classname", NameCaseUtil.toNameCase(NameCaseEnum.PASCAL_CASE, dto.getTableName()));
-        context.put("originalClassname", dto.getTableName());
-        context.put("properties", getFinalProperties(dto.getColumns()));
+        context.put("className", dto.getClassName());
+        context.put("classname", dto.getClassName());
+        context.put("originalClassName", dto.getOriginalClassName());
+        context.put("properties", dto.getColumns());
         StringWriter writer = new StringWriter();
         template.merge(context, writer);
 
         return writer.toString();
     }
 
-    private List<ColumnDTO> getFinalProperties(List<ColumnDTO> properties) {
-        List<ColumnDTO> newList = new ArrayList<>();
+    public String merge(Map<Object, String> cols, String templateString) {
+        repo.putStringResource("FROM_TEMPLATE_STRING", templateString);
+        Template template = velocityEngine.getTemplate("FROM_TEMPLATE_STRING");
+        VelocityContext context = new VelocityContext();
+        context.put("NameCaseUtil", NameCaseUtil.class);
+        context.put("cols", cols);
+        StringWriter writer = new StringWriter();
+        template.merge(context, writer);
+        return writer.toString();
+    }
+
+    private List<PropertyDTO> getFinalProperties(List<PropertyDTO> properties) {
+        List<PropertyDTO> newList = new ArrayList<>();
         if (properties == null) {
             return newList;
         }
 
-        for (ColumnDTO property: properties) {
-            ColumnDTO dto = new ColumnDTO(property.getName(), property.getType());
+        for (PropertyDTO property: properties) {
+            PropertyDTO dto = new PropertyDTO(property.getName(), property.getType());
             dto.setName(NameCaseUtil.toNameCase(NameCaseEnum.CAMEL_CASE, property.getName()));
             newList.add(dto);
         }
@@ -67,13 +76,13 @@ public class VelocityService {
         return newList;
     }
 
-    public static class ColumnDTO {
+    public static class PropertyDTO {
         private String name;
         private String type;
         private final String originalName;
         private final String originalType;
 
-        public ColumnDTO(
+        public PropertyDTO(
                 String name,
                 String type
         ) {
@@ -91,12 +100,12 @@ public class VelocityService {
             return type;
         }
 
-        public ColumnDTO setName(String name) {
+        public PropertyDTO setName(String name) {
             this.name = name;
             return this;
         }
 
-        public ColumnDTO setType(String type) {
+        public PropertyDTO setType(String type) {
             this.type = type;
             return this;
         }
@@ -110,20 +119,26 @@ public class VelocityService {
         }
     }
 
-    public static class TableDTO {
-        private String tableName;
-        private List<ColumnDTO> columns;
+    public static class ClassDTO {
+        private String className;
+        private String originalClassName;
+        private List<PropertyDTO> columns;
 
-        public TableDTO(String tableName, List<ColumnDTO> properties) {
-            this.tableName = tableName;
+        public ClassDTO(String className, List<PropertyDTO> properties) {
+            this.className = NameCaseUtil.pascalCase(className);
+            this.originalClassName = className;
             this.columns = properties;
         }
 
-        public String getTableName() {
-            return tableName;
+        public String getClassName() {
+            return className;
         }
 
-        public List<ColumnDTO> getColumns() {
+        public String getOriginalClassName() {
+            return originalClassName;
+        }
+
+        public List<PropertyDTO> getColumns() {
             return columns;
         }
     }

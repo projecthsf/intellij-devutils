@@ -1,5 +1,6 @@
 package io.github.projecthsf.devutils.actions.converters.dto;
 
+import io.github.projecthsf.devutils.enums.ActionEnum;
 import io.github.projecthsf.devutils.enums.LanguageEnum;
 import io.github.projecthsf.devutils.enums.SqlDataTypeEnum;
 import io.github.projecthsf.devutils.service.VelocityService;
@@ -7,30 +8,28 @@ import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
-import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SqlToDTOAction extends CommonToDTOAction {
-    public SqlToDTOAction(@NotNull String title, Icon icon) {
-        super(title, icon);
+
+    public SqlToDTOAction() {
+        super(ActionEnum.SQL_TO_DTO);
     }
 
-    protected VelocityService.TableDTO getTableDTO(String sql) throws Exception {
+    protected VelocityService.ClassDTO getTableDTO(String sql) throws Exception {
         Statement statement = CCJSqlParserUtil.parse(sql);
-
         if (statement instanceof CreateTable createTable) {
-            List<VelocityService.ColumnDTO> columns = new ArrayList<>();
+            List<VelocityService.PropertyDTO> columns = new ArrayList<>();
             for (ColumnDefinition columnDefinition: createTable.getColumnDefinitions()) {
-                columns.add(new VelocityService.ColumnDTO(
+                columns.add(new VelocityService.PropertyDTO(
                         columnDefinition.getColumnName().replace("`", ""),
                         getDataType(columnDefinition.getColDataType().getDataType())
                 ));
             }
 
-            return new VelocityService.TableDTO(createTable.getTable().getName().replace("`", ""), columns);
+            return new VelocityService.ClassDTO(createTable.getTable().getName().replace("`", ""), columns);
         }
         return null;
     }

@@ -1,6 +1,8 @@
 package io.github.projecthsf.devutils.forms;
 
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.ui.components.ActionLink;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
 import io.github.projecthsf.devutils.enums.LanguageEnum;
@@ -11,6 +13,8 @@ import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +37,22 @@ public class DtoTemplateSettingForm extends JPanel {
         previewPanel.setPreferredSize(new Dimension(500, 250)); // Example preferred size
 
         String tooltip = ApplyDatasetUtil.getTemplate("templates/language-dto-template-tooltip.html");
+        JPanel codeTemplatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        codeTemplatePanel.add(ApplyDatasetUtil.getToolTipButton("Code template", tooltip));
+        ActionLink link = new ActionLink(
+                "View document",
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        BrowserUtil.browse("https://github.com/projecthsf/intellij-devutils/blob/main/docs/settings/dto-templates.md");
+                    }
+                }
+        );
+        link.setExternalLinkIcon();
+        codeTemplatePanel.add(link);
         return FormBuilder.createFormBuilder()
                 .addLabeledComponent("Name", templateName)
-                .addComponent(ApplyDatasetUtil.getToolTipButton("Code template", tooltip))
+                .addComponent(codeTemplatePanel)
                 .addComponent(templateCodePanel)
                 .addComponent(new JLabel("Preview"))
                 .addComponent(previewPanel)

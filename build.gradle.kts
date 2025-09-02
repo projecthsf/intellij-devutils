@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.github.projecthsf.devutils"
-version = "1.0.0"
+version = "1.1.0"
 
 repositories {
   mavenCentral()
@@ -20,10 +20,11 @@ dependencies {
   implementation("com.opencsv:opencsv:5.12.0")
   implementation("com.github.jsqlparser", "jsqlparser", "5.3")
   intellijPlatform {
-    intellijIdeaCommunity("2024.1.1")
+    intellijIdeaCommunity("2024.2.6")
     //pycharmCommunity("2024.2.6")
     //datagrip("2025.1.3")
     //bundledPlugin("com.jetbrains.python")
+  // bundledPlugin("com.intellij.java")
   }
 }
 
