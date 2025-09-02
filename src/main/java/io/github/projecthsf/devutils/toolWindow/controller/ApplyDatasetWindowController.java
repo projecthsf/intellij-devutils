@@ -35,22 +35,15 @@ public class ApplyDatasetWindowController extends JPanel {
         add(form, BorderLayout.CENTER);
         add(getControlPanel(), BorderLayout.SOUTH);
 
-        form.updateDataSet("Anne Hathaway,1982\nSydney Sweeney,1997");
+        String datasetSample = ApplyDatasetUtil.getTemplate("templates/applydataset-dataset-sample.tpl");
+        form.updateDataSet(datasetSample);
         form.addListeners(
                 new TextAreaDocumentListener(this, true),
                 new TextAreaDocumentListener(this, false),
                 new ComboBoxListener(this)
         );
-
-        String codeTemplate = "Row: $0,$1\n" +
-                "\t// simplify\n" +
-                "\tName: $0 - UpperCase ${0.upperCase}\n" +
-                "\tYear:${1}\n" +
-                "\t// velocity\n" +
-                "\tName: $cols[0] - UpperCase $cols[\"0.upperCase\"] or $NameCaseUtil.upperCase($cols[0])\n" +
-                "\tYear:$cols[1]\n" +
-                "\tFirst Name: $cols[0].split(' ')[0]";
-        form.updateCodeTemplate(codeTemplate);
+        String codeTemplateSample = ApplyDatasetUtil.getTemplate("templates/applydataset-code-template-sample.tpl");
+        form.updateCodeTemplate(codeTemplateSample);
     }
 
     private JPanel getControlPanel() {
