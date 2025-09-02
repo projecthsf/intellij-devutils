@@ -40,9 +40,10 @@ public class VelocityService {
         Template template = velocityEngine.getTemplate("FROM_TEMPLATE_STRING");
         VelocityContext context = new VelocityContext();
         context.put("NameCaseUtil", NameCaseUtil.class);
-        context.put("classname", NameCaseUtil.toNameCase(NameCaseEnum.PASCAL_CASE, dto.getTableName()));
-        context.put("originalClassname", dto.getTableName());
-        context.put("properties", getFinalProperties(dto.getColumns()));
+        context.put("className", dto.getClassName());
+        context.put("classname", dto.getClassName());
+        context.put("originalClassName", dto.getOriginalClassName());
+        context.put("properties", dto.getColumns());
         StringWriter writer = new StringWriter();
         template.merge(context, writer);
 
@@ -119,16 +120,22 @@ public class VelocityService {
     }
 
     public static class ClassDTO {
-        private String tableName;
+        private String className;
+        private String originalClassName;
         private List<PropertyDTO> columns;
 
-        public ClassDTO(String tableName, List<PropertyDTO> properties) {
-            this.tableName = tableName;
+        public ClassDTO(String className, List<PropertyDTO> properties) {
+            this.className = NameCaseUtil.pascalCase(className);
+            this.originalClassName = className;
             this.columns = properties;
         }
 
-        public String getTableName() {
-            return tableName;
+        public String getClassName() {
+            return className;
+        }
+
+        public String getOriginalClassName() {
+            return originalClassName;
         }
 
         public List<PropertyDTO> getColumns() {
