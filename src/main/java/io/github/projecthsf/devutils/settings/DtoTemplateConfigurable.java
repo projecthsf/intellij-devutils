@@ -25,7 +25,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public final class DtoTemplateConfigurable extends MasterDetailsComponent {
@@ -234,20 +233,26 @@ public final class DtoTemplateConfigurable extends MasterDetailsComponent {
         }
 
         private String getPreviewString(StateComponent.State settings, String templateCode) {
-            List<VelocityService.ColumnDTO> columns = new ArrayList<>();
-            columns.add(new VelocityService.ColumnDTO(
+            List<VelocityService.PropertyDTO> columns = new ArrayList<>();
+            VelocityService.PropertyDTO id = new VelocityService.PropertyDTO(
                     "id",
                     "INT"
-            ));
-            columns.add(new VelocityService.ColumnDTO(
+            );
+            id.setName("id");
+            id.setType("Integer");
+            columns.add(id);
+
+            VelocityService.PropertyDTO name = new VelocityService.PropertyDTO(
                     "user_name",
                     "VARCHAR"
-            ));
+            );
+            name.setName("userName");
+            name.setType("String");
+            columns.add(name);
 
-            VelocityService.TableDTO classDTO = new VelocityService.TableDTO("your_class_name", columns);
+            VelocityService.ClassDTO classDTO = new VelocityService.ClassDTO("your_class_name", columns);
             VelocityService service = VelocityService.getInstance();
-            String content = service.merge(classDTO, templateCode);
-            return content;
+            return service.merge(classDTO, templateCode);
         }
     }
 

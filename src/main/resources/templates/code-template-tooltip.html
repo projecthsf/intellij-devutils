@@ -2,8 +2,8 @@
 <p><strong>${1}</strong> is value of dataset second column</p>
 <p>and so on</p>
 <p>Example: the dataset:</p>
-<p>your username 1,your password 1<br />your username 2, your password 2</p>
-<p>Then:</p>
+<pre>your username 1,your password 1<br />your username 2, your password 2</pre>
+<p>Simplify way:</p>
 <p>$0 = your username 1/your username 2<br />$1 = your password 1/your password 2</p>
 <p>${0} = your username 1/your username 2<br />${1} = your password 1/your password 2</p>
 <p>Also support some base name case:</p>
@@ -15,3 +15,8 @@
     ${0.upperCase} = YOUR USERNAME 1<br />
     ${0.lowerCase} = your username 1<br />
     ${0.constantCase} = YOUR_USERNAME_1</p>
+
+<p>Apache Velocity way:</p>
+<p>$cols[0] = your username 1/your username 2<br />$cols[1] = your password 1/your password 2</p>
+<p>$cols["0.camelCase"] = yourUsername1/yourUsername2<br />...</p>
+<p> And you can use all Velocity's functions</p>
