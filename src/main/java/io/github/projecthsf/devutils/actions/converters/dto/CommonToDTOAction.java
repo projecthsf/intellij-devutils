@@ -1,6 +1,5 @@
 package io.github.projecthsf.devutils.actions.converters.dto;
 
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.ide.CopyPasteManager;
@@ -34,7 +33,7 @@ import java.util.Objects;
 public abstract class CommonToDTOAction extends CommonAction {
     ToDTOForm form;
     StateComponent.State settings = Objects.requireNonNull(StateComponent.getInstance().getState());
-    VelocityService.TableDTO tableDTO;
+    VelocityService.ClassDTO tableDTO;
     String title;
     public CommonToDTOAction(ActionEnum action) {
         super(action);
@@ -64,7 +63,7 @@ public abstract class CommonToDTOAction extends CommonAction {
 
     }
 
-    protected abstract VelocityService.TableDTO getTableDTO(String selectedText) throws Exception;
+    protected abstract VelocityService.ClassDTO getTableDTO(String selectedText) throws Exception;
 
     static class ToDTODialog extends DialogWrapper {
         private CommonToDTOAction action;
@@ -131,8 +130,6 @@ public abstract class CommonToDTOAction extends CommonAction {
             for (String key: action.settings.getDtoTemplateMap().keySet()) {
                 addNewItem(key, ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME.equals(key));
             }
-
-
         }
         @Override
         public @NlsContexts.ConfigurableName String getDisplayName() {
