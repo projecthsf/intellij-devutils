@@ -1,10 +1,6 @@
 package io.github.projecthsf.devutils.service;
 
-import io.github.projecthsf.devutils.enums.LanguageEnum;
 import io.github.projecthsf.devutils.enums.NameCaseEnum;
-import io.github.projecthsf.devutils.enums.SqlDataTypeEnum;
-import io.github.projecthsf.devutils.settings.StateComponent;
-import io.github.projecthsf.devutils.utils.DataTypeMappingUtil;
 import io.github.projecthsf.devutils.utils.NameCaseUtil;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -39,7 +35,7 @@ public class VelocityService {
         return new VelocityService(repo);
     }
 
-    public String merge(TableDTO dto, String templateString) {
+    public String merge(ClassDTO dto, String templateString) {
         repo.putStringResource("FROM_TEMPLATE_STRING", templateString);
         Template template = velocityEngine.getTemplate("FROM_TEMPLATE_STRING");
         VelocityContext context = new VelocityContext();
@@ -64,14 +60,14 @@ public class VelocityService {
         return writer.toString();
     }
 
-    private List<ColumnDTO> getFinalProperties(List<ColumnDTO> properties) {
-        List<ColumnDTO> newList = new ArrayList<>();
+    private List<PropertyDTO> getFinalProperties(List<PropertyDTO> properties) {
+        List<PropertyDTO> newList = new ArrayList<>();
         if (properties == null) {
             return newList;
         }
 
-        for (ColumnDTO property: properties) {
-            ColumnDTO dto = new ColumnDTO(property.getName(), property.getType());
+        for (PropertyDTO property: properties) {
+            PropertyDTO dto = new PropertyDTO(property.getName(), property.getType());
             dto.setName(NameCaseUtil.toNameCase(NameCaseEnum.CAMEL_CASE, property.getName()));
             newList.add(dto);
         }
@@ -79,13 +75,13 @@ public class VelocityService {
         return newList;
     }
 
-    public static class ColumnDTO {
+    public static class PropertyDTO {
         private String name;
         private String type;
         private final String originalName;
         private final String originalType;
 
-        public ColumnDTO(
+        public PropertyDTO(
                 String name,
                 String type
         ) {
@@ -103,12 +99,12 @@ public class VelocityService {
             return type;
         }
 
-        public ColumnDTO setName(String name) {
+        public PropertyDTO setName(String name) {
             this.name = name;
             return this;
         }
 
-        public ColumnDTO setType(String type) {
+        public PropertyDTO setType(String type) {
             this.type = type;
             return this;
         }
@@ -122,11 +118,11 @@ public class VelocityService {
         }
     }
 
-    public static class TableDTO {
+    public static class ClassDTO {
         private String tableName;
-        private List<ColumnDTO> columns;
+        private List<PropertyDTO> columns;
 
-        public TableDTO(String tableName, List<ColumnDTO> properties) {
+        public ClassDTO(String tableName, List<PropertyDTO> properties) {
             this.tableName = tableName;
             this.columns = properties;
         }
@@ -135,7 +131,7 @@ public class VelocityService {
             return tableName;
         }
 
-        public List<ColumnDTO> getColumns() {
+        public List<PropertyDTO> getColumns() {
             return columns;
         }
     }
