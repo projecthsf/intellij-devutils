@@ -1,5 +1,6 @@
 package io.github.projecthsf.devutils.actions.converters.dto;
 
+import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.ide.CopyPasteManager;
@@ -10,8 +11,6 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.NamedConfigurable;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.NlsSafe;
-import io.github.projecthsf.devutils.actions.CommonAction;
-import io.github.projecthsf.devutils.enums.ActionEnum;
 import io.github.projecthsf.devutils.forms.ToDTOForm;
 import io.github.projecthsf.devutils.service.VelocityService;
 import io.github.projecthsf.devutils.settings.StateComponent;
@@ -30,14 +29,14 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
 
-public abstract class CommonToDTOAction extends CommonAction {
+public abstract class CommonToDTOAction extends AnAction {
     ToDTOForm form;
     StateComponent.State settings = Objects.requireNonNull(StateComponent.getInstance().getState());
-    VelocityService.ClassDTO tableDTO;
+    VelocityService.TableDTO tableDTO;
     String title;
-    public CommonToDTOAction(ActionEnum action) {
-        super(action);
-        this.title = action.getTitle();
+    public CommonToDTOAction(@NotNull String title, Icon icon) {
+        super(title, "", icon);
+        this.title = title;
     }
 
     @Override
@@ -63,7 +62,7 @@ public abstract class CommonToDTOAction extends CommonAction {
 
     }
 
-    protected abstract VelocityService.ClassDTO getTableDTO(String selectedText) throws Exception;
+    protected abstract VelocityService.TableDTO getTableDTO(String selectedText) throws Exception;
 
     static class ToDTODialog extends DialogWrapper {
         private CommonToDTOAction action;
@@ -120,7 +119,7 @@ public abstract class CommonToDTOAction extends CommonAction {
                     VelocityService service = VelocityService.getInstance();
                     String content = service.merge(action.tableDTO, action.settings.getDtoTemplateMap().get(node.getDisplayName()));
                     action.form.updateForm(
-                            action.tableDTO.getClassName(),
+                            action.tableDTO.getTableName(),
                             node.getDisplayName(),
                             content
                     );
@@ -130,6 +129,8 @@ public abstract class CommonToDTOAction extends CommonAction {
             for (String key: action.settings.getDtoTemplateMap().keySet()) {
                 addNewItem(key, ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME.equals(key));
             }
+
+
         }
         @Override
         public @NlsContexts.ConfigurableName String getDisplayName() {
