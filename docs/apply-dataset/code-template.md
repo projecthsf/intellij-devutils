@@ -46,14 +46,14 @@ Sydney Sweeney,1997
 
 ### Code template
 ###### Simplify
-![Simplify code template](https://raw.githubusercontent.com/projecthsf/intellij-devutils/refs/heads/2-csv-dataset-velocity/docs/images/code-template-simplify.png "Simplify code template")
+![Simplify code template](https://raw.githubusercontent.com/projecthsf/intellij-devutils/refs/heads/main/docs/images/code-template-simplify.png "Simplify code template")
 <pre>
 Name: $0 Year: $1 - UpperCase: ${0.upperCase}
 </pre>
 ** Note **\$0**=**\${0}** and **\$1**=**\${1}**
 
 ###### Velocity
-![Velocity code template](https://raw.githubusercontent.com/projecthsf/intellij-devutils/refs/heads/2-csv-dataset-velocity/docs/images/code-template-velocity.png "Velocity code template")
+![Velocity code template](https://raw.githubusercontent.com/projecthsf/intellij-devutils/refs/heads/main/docs/images/code-template-velocity.png "Velocity code template")
 <pre>
 Name: $cols[0] Year: $cols[1] - UpperCase: $cols["0.upperCase"]
 </pre>
@@ -72,7 +72,7 @@ private BigDecimal price;
 </pre>
 ** Since this dataset is not separte by comma (,), we can choose separator = SPACE(' ')
 
-![Velocity advance code template](https://raw.githubusercontent.com/projecthsf/intellij-devutils/refs/heads/2-csv-dataset-velocity/docs/images/code-template-velocity-advance.png "Velocity advance code template")
+![Velocity advance code template](https://raw.githubusercontent.com/projecthsf/intellij-devutils/refs/heads/main/docs/images/code-template-velocity-advance.png "Velocity advance code template")
 ### Code template
 <pre>
 - FieldName: "${2}" -- end with semicolon(;)
