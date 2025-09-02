@@ -38,7 +38,7 @@ public class ${className}DTO {
 }
 </pre>
 
-![DTO template place holder](https://raw.githubusercontent.com/projecthsf/intellij-devutils/refs/heads/2-csv-dataset-velocity/docs/images/setting-dto-templates.png "Dto Templates")
+![DTO template place holder](https://raw.githubusercontent.com/projecthsf/intellij-devutils/refs/heads/main/docs/images/setting-dto-templates.png "Dto Templates")
 
 
 ## References:
