@@ -103,7 +103,7 @@ public class ApplyDatasetWindowForm extends JPanel {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        BrowserUtil.browse("https://github.com/projecthsf/intellij-devutils/blob/2-csv-dataset-velocity/docs/apply-dataset/code-template.md");
+                        BrowserUtil.browse("https://github.com/projecthsf/intellij-devutils/blob/main/docs/apply-dataset/code-template.md");
                     }
                 }
         );
