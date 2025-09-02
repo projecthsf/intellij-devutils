@@ -234,19 +234,25 @@ public final class DtoTemplateConfigurable extends MasterDetailsComponent {
 
         private String getPreviewString(StateComponent.State settings, String templateCode) {
             List<VelocityService.PropertyDTO> columns = new ArrayList<>();
-            columns.add(new VelocityService.PropertyDTO(
+            VelocityService.PropertyDTO id = new VelocityService.PropertyDTO(
                     "id",
                     "INT"
-            ));
-            columns.add(new VelocityService.PropertyDTO(
+            );
+            id.setName("id");
+            id.setType("Integer");
+            columns.add(id);
+
+            VelocityService.PropertyDTO name = new VelocityService.PropertyDTO(
                     "user_name",
                     "VARCHAR"
-            ));
+            );
+            name.setName("userName");
+            name.setType("String");
+            columns.add(name);
 
             VelocityService.ClassDTO classDTO = new VelocityService.ClassDTO("your_class_name", columns);
             VelocityService service = VelocityService.getInstance();
-            String content = service.merge(classDTO, templateCode);
-            return content;
+            return service.merge(classDTO, templateCode);
         }
     }
 
