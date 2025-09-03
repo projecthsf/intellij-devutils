@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public abstract class CommonAction extends AnAction {
-    private final StateComponent.State state = Objects.requireNonNull(StateComponent.getInstance().getState());
+    protected final StateComponent.State state = Objects.requireNonNull(StateComponent.getInstance().getState());
     protected ActionEnum action;
     public CommonAction(ActionEnum action) {
         super(action.getTitle(), "", action.getIcon());
