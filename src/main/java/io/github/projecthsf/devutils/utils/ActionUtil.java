@@ -27,6 +27,7 @@ import java.awt.*;
 public class ActionUtil {
     public static Caret getSelectedCaret(@NotNull AnActionEvent event) {
         Editor editor = event.getDataContext().getData(CommonDataKeys.EDITOR);
+        assert editor != null;
         return editor.getCaretModel().getPrimaryCaret();
     }
 
