@@ -44,8 +44,8 @@ public class SqlToDTOAction extends CommonToDTOAction {
             throw new Exception("Not support type: " + dataType);
         }
 
-        if (settings.getDataTypeMap(LanguageEnum.SQL).containsKey(type.toUpperCase())) {
-            return settings.getDataTypeMap(LanguageEnum.SQL).get(type.toUpperCase());
+        if (state.getDataTypeMap(LanguageEnum.SQL).containsKey(type.toUpperCase())) {
+            return state.getDataTypeMap(LanguageEnum.SQL).get(type.toUpperCase());
         }
 
         return String.format("%s[NotMapping]",type.toUpperCase());
