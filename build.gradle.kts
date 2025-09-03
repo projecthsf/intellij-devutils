@@ -17,6 +17,7 @@ repositories {
 }
 
 dependencies {
+  implementation("io.github.projecthsf:name-case-util:1.0.0")
   implementation("com.opencsv:opencsv:5.12.0")
   implementation("com.github.jsqlparser", "jsqlparser", "5.3")
   intellijPlatform {
