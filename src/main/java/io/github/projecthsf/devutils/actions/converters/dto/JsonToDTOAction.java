@@ -27,10 +27,10 @@ public class JsonToDTOAction extends CommonToDTOAction {
         List<VelocityService.PropertyDTO> columns = new ArrayList<>();
         for (String key: map.keySet()) {
             String sourceDataType = getType(map.get(key));
-            if (!settings.getDataTypeMap(LanguageEnum.JSON).containsKey(sourceDataType)) {
+            if (!state.getDataTypeMap(LanguageEnum.JSON).containsKey(sourceDataType)) {
                 continue;
             }
-            String targetDataType = settings.getDataTypeMap(LanguageEnum.JSON).get(sourceDataType);
+            String targetDataType = state.getDataTypeMap(LanguageEnum.JSON).get(sourceDataType);
             columns.add(new VelocityService.PropertyDTO(
                     key,
                     targetDataType
