@@ -32,12 +32,9 @@ import java.util.Objects;
 
 public abstract class CommonToDTOAction extends CommonAction {
     ToDTOForm form;
-    StateComponent.State settings = Objects.requireNonNull(StateComponent.getInstance().getState());
     VelocityService.ClassDTO tableDTO;
-    String title;
     public CommonToDTOAction(ActionEnum action) {
         super(action);
-        this.title = action.getTitle();
     }
 
     @Override
@@ -53,7 +50,7 @@ public abstract class CommonToDTOAction extends CommonAction {
             return;
         }
 
-        if (settings == null) {
+        if (state == null) {
             Messages.showErrorDialog("No templates config found!", "Error");
             return;
         }
@@ -69,7 +66,7 @@ public abstract class CommonToDTOAction extends CommonAction {
         private CommonToDTOAction action;
         ToDTODialog(CommonToDTOAction action) {
             super(false);
-            setTitle(action.title);
+            setTitle(action.action.getTitle());
             this.action = action;
             init();
         }
@@ -118,7 +115,7 @@ public abstract class CommonToDTOAction extends CommonAction {
 
                     MyNode node = (MyNode)path.getLastPathComponent();
                     VelocityService service = VelocityService.getInstance();
-                    String content = service.merge(action.tableDTO, action.settings.getDtoTemplateMap().get(node.getDisplayName()));
+                    String content = service.merge(action.tableDTO, action.state.getDtoTemplateMap().get(node.getDisplayName()));
                     action.form.updateForm(
                             action.tableDTO.getClassName(),
                             node.getDisplayName(),
@@ -127,7 +124,7 @@ public abstract class CommonToDTOAction extends CommonAction {
                 }
             });
 
-            for (String key: action.settings.getDtoTemplateMap().keySet()) {
+            for (String key: action.state.getDtoTemplateMap().keySet()) {
                 addNewItem(key, ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME.equals(key));
             }
         }
