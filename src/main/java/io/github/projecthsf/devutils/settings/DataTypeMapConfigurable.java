@@ -2,12 +2,11 @@ package io.github.projecthsf.devutils.settings;
 
 import com.intellij.openapi.options.Configurable;
 import io.github.projecthsf.devutils.enums.LanguageEnum;
-import io.github.projecthsf.devutils.forms.DataTypeMapSettingForm;
+import io.github.projecthsf.devutils.forms.settings.DataTypeMapSettingForm;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.Map;
 import java.util.Objects;
 
 public  class DataTypeMapConfigurable {

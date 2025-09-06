@@ -12,9 +12,8 @@ import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.NlsSafe;
 import io.github.projecthsf.devutils.actions.CommonAction;
 import io.github.projecthsf.devutils.enums.ActionEnum;
-import io.github.projecthsf.devutils.forms.ToDTOForm;
+import io.github.projecthsf.devutils.forms.actions.ToDTOForm;
 import io.github.projecthsf.devutils.service.VelocityService;
-import io.github.projecthsf.devutils.settings.StateComponent;
 import io.github.projecthsf.devutils.utils.ActionUtil;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 import io.github.projecthsf.devutils.utils.DialogUtil;
@@ -28,7 +27,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
-import java.util.Objects;
 
 public abstract class CommonToDTOAction extends CommonAction {
     ToDTOForm form;

@@ -1,4 +1,4 @@
-package io.github.projecthsf.devutils.forms;
+package io.github.projecthsf.devutils.forms.settings;
 
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
