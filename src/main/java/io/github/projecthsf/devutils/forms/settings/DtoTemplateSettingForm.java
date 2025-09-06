@@ -2,6 +2,7 @@ package io.github.projecthsf.devutils.forms.settings;
 
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.ui.components.ActionLink;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
@@ -68,6 +69,10 @@ public class DtoTemplateSettingForm extends JPanel {
 
     public String getTemplateCode() {
         return templateCode.getDocument().getText();
+    }
+
+    public void addListeners(DocumentListener codeTemplateListener) {
+        templateCode.getDocument().addDocumentListener(codeTemplateListener);
     }
 
 }

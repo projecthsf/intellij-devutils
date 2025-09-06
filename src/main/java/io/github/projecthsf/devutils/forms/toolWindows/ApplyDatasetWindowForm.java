@@ -21,14 +21,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ApplyDatasetWindowForm extends JPanel {
-    private final EditorEx dataSet;
-    private final ComboBox<CsvSeparatorEnum> separartor;
-    private final Editor templateCode;
-    private final Editor preview;
+    protected final EditorEx dataSet;
+    protected final ComboBox<CsvSeparatorEnum> separartor;
+    protected final Editor codeTemplate;
+    protected final Editor preview;
 
-    public ApplyDatasetWindowForm(Request request) {
+    public ApplyDatasetWindowForm() {
         dataSet = ActionUtil.getEditorEx(LanguageEnum.JAVA);
-        templateCode = ActionUtil.getEditor("");
+        codeTemplate = ActionUtil.getEditor("");
         preview = ActionUtil.getEditor("", true);
         separartor = new ComboBox<>(CsvSeparatorEnum.values());
 
@@ -43,12 +43,13 @@ public class ApplyDatasetWindowForm extends JPanel {
     }
 
     public void reset() {
+        separartor.setSelectedIndex(0);
         ActionUtil.updateText(dataSet, "");
-        ActionUtil.updateText(templateCode, "");
+        ActionUtil.updateText(codeTemplate, "");
         //ActionUtil.updateText(preview, "");
     }
 
-    public String getDataSet() {
+    public String getDataset() {
         return dataSet.getDocument().getText();
     }
 
@@ -56,14 +57,14 @@ public class ApplyDatasetWindowForm extends JPanel {
         return (CsvSeparatorEnum) separartor.getSelectedItem();
     }
 
-    public void addListeners(DocumentListener dataSetListener, DocumentListener templateCodeListner, ActionListener separatorLister) {
-        dataSet.getDocument().addDocumentListener(dataSetListener);
-        templateCode.getDocument().addDocumentListener(templateCodeListner);
+    public void addListeners(DocumentListener datasetListener, DocumentListener templateCodeListner, ActionListener separatorLister) {
+        dataSet.getDocument().addDocumentListener(datasetListener);
+        codeTemplate.getDocument().addDocumentListener(templateCodeListner);
         separartor.addActionListener(separatorLister);
     }
 
-    public String getTemplateCode() {
-        return templateCode.getDocument().getText();
+    public String getCodeTemplate() {
+        return codeTemplate.getDocument().getText();
     }
 
     public String getPreview() {
@@ -74,16 +75,16 @@ public class ApplyDatasetWindowForm extends JPanel {
         ActionUtil.updateText(preview, text);
     }
 
-    public void updateDataSet(String text) {
+    public void updateDataset(String text) {
         ActionUtil.updateText(dataSet, text);
     }
 
     public void updateCodeTemplate(String text) {
-        ActionUtil.updateText(templateCode, text);
+        ActionUtil.updateText(codeTemplate, text);
     }
 
     public void updateCodeTemplate(Caret caret) {
-        ActionUtil.updateText(templateCode, caret.getSelectedText());
+        ActionUtil.updateText(codeTemplate, caret.getSelectedText());
     }
 
     private JPanel getCenterPanel() {
@@ -113,7 +114,7 @@ public class ApplyDatasetWindowForm extends JPanel {
                 .addComponent(datasetPanel)
                 .addComponent(ActionUtil.getEditorPanel(dataSet, 400, 180))
                 .addComponent(codeTemplatePanel)
-                .addComponent(ActionUtil.getEditorPanel(templateCode, 400, 180))
+                .addComponent(ActionUtil.getEditorPanel(codeTemplate, 400, 180))
                 .addComponent(new JBLabel("Result"))
                 .addComponent(ActionUtil.getEditorPanel(preview, 400, 180))
                 .getPanel();
