@@ -1,6 +1,9 @@
 package io.github.projecthsf.devutils.settings;
 
+import io.github.projecthsf.devutils.enums.CsvSeparatorEnum;
+import io.github.projecthsf.devutils.forms.FormHandler;
 import io.github.projecthsf.devutils.forms.settings.ApplyDatasetSettingForm;
+import io.github.projecthsf.devutils.forms.toolWindows.ApplyDatasetWindowFormHandler;
 
 import java.util.Set;
 
@@ -18,21 +21,38 @@ public class ApplyDatasetConfigurable extends CommonMasterDetail<ApplyDatasetSet
     @Override
     protected void updateForm(String itemName) {
         if (setting.getApplyDatasetMap().containsKey(itemName)) {
-            form.updateForm(itemName, setting.getApplyDatasetMap().get(itemName).getCodeTemplate());
+            StateComponent.ApplyDatasetState state = setting.getApplyDatasetMap().get(itemName);
+            form.updateForm(itemName,
+                    state.getCsvSeparator(),
+                    state.getDataset(),
+                    state.getCodeTemplate()
+            );
             return;
         }
 
-        form.updateForm(itemName, "");
+        form.updateForm(itemName, CsvSeparatorEnum.COMMA, "", "");
     }
 
     @Override
-    protected void applyChange() {
-
+    protected void applyChange(String itemName) {
+        setting.getApplyDatasetMap().put(itemName, new StateComponent.ApplyDatasetState(form.getSeparator(), form.getDataset(), form.getCodeTemplate()));
     }
 
     @Override
     protected boolean isFormModified(String itemName) {
-        return !setting.getApplyDatasetMap().containsKey(itemName) ||
-                !setting.getApplyDatasetMap().get(itemName).getCodeTemplate().equals(form.getTemplateCode());
+        if (!setting.getApplyDatasetMap().containsKey(itemName)) {
+            return true;
+        }
+
+        StateComponent.ApplyDatasetState state = setting.getApplyDatasetMap().get(itemName);
+        return !state.getCsvSeparator().equals(form.getSeparator()) ||
+                !state.getDataset().equals(form.getDataset()) ||
+                !state.getCodeTemplate().equals(form.getCodeTemplate());
+
+    }
+
+    @Override
+    protected FormHandler getFormHandler() {
+        return new ApplyDatasetWindowFormHandler(form);
     }
 }

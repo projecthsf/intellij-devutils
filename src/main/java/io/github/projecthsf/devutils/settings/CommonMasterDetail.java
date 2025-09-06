@@ -11,6 +11,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.NamedConfigurable;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.NlsSafe;
+import io.github.projecthsf.devutils.forms.FormHandler;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,14 +34,18 @@ public abstract class CommonMasterDetail<F extends JComponent> extends MasterDet
 
     public CommonMasterDetail() {
         this.form = createForm();
+        getFormHandler();
         itemName = ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME;
         loadExistedTreeNodes();
     }
 
+    protected FormHandler getFormHandler() {
+        return null;
+    }
     protected abstract Set<String> getItemNames();
     protected abstract void updateForm(String itemName);
     protected abstract boolean isFormModified(String itemName);
-    protected abstract void applyChange();
+    protected abstract void applyChange(String itemName);
 
     abstract F createForm();
     private void loadExistedTreeNodes() {
@@ -204,7 +209,7 @@ public abstract class CommonMasterDetail<F extends JComponent> extends MasterDet
 
         @Override
         public void apply() throws ConfigurationException {
-            configurable.applyChange();
+            configurable.applyChange(configurable.itemName);
         }
     }
 }
