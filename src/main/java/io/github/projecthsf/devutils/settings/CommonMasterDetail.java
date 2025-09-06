@@ -11,9 +11,6 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.NamedConfigurable;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.NlsSafe;
-import com.intellij.ui.treeStructure.Tree;
-import io.github.projecthsf.devutils.forms.settings.DtoTemplateSettingForm;
-import io.github.projecthsf.devutils.service.VelocityService;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,28 +23,29 @@ import javax.swing.tree.TreePath;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-public final class DtoTemplateConfigurable extends MasterDetailsComponent {
-    StateComponent.State state = Objects.requireNonNull(StateComponent.getInstance().getState());
-    DtoTemplateSettingForm form = new DtoTemplateSettingForm();
-    public DtoTemplateConfigurable() {
-        // must after form initiated
+public abstract class CommonMasterDetail<F extends JComponent> extends MasterDetailsComponent {
+    StateComponent.State setting = Objects.requireNonNull(StateComponent.getInstance().getState());
+    F form;
+    String itemName;
+    Boolean hasModified = false;
+
+    public CommonMasterDetail() {
+        this.form = createForm();
+        itemName = ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME;
         loadExistedTreeNodes();
     }
 
-    @Override
-    public void reset() {
-        myRoot.removeAllChildren();
-        for (String key: state.getDtoTemplateMap().keySet()) {
-            addNewItem(key);
-        }
-    }
+    protected abstract Set<String> getItemNames();
+    protected abstract void updateForm(String itemName);
+    protected abstract boolean isFormModified(String itemName);
+    protected abstract void applyChange();
 
-    Tree getMyTree() {
-        return myTree;
-    }
-
+    abstract F createForm();
     private void loadExistedTreeNodes() {
+        initTree();
+        reset();
         myTree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent e) {
                 TreePath path = e.getNewLeadSelectionPath();
@@ -56,24 +54,24 @@ public final class DtoTemplateConfigurable extends MasterDetailsComponent {
                 }
 
                 MasterDetailsComponent.MyNode node = (MasterDetailsComponent.MyNode)path.getLastPathComponent();
-                String name = node.getConfigurable().getDisplayName();
-                String content = "";
-                if (state.getDtoTemplateMap().containsKey(name)) {
-                    content = state.getDtoTemplateMap().get(name);
-                }
-
-                form.updateForm(name, content);
+                itemName = node.getConfigurable().getDisplayName();
+                updateForm(itemName);
             }
         });
-        initTree();
-        for (String key: state.getDtoTemplateMap().keySet()) {
-            addNewItem(key);
-        }
-    }
 
+    }
     @Override
     public @NlsContexts.ConfigurableName String getDisplayName() {
         return "";
+    }
+
+    @Override
+    public void reset() {
+        clearChildren();
+        hasModified = false;
+        for (String itemName: getItemNames()) {
+            addNewItem(itemName);
+        }
     }
 
     @Override
@@ -81,57 +79,47 @@ public final class DtoTemplateConfigurable extends MasterDetailsComponent {
         ArrayList<AnAction> result = new ArrayList<>();
         result.add(new AddDumAwareAction(this));
         result.add(new RemoveDumbAwareAction(this));
-        //result.add(new MasterDetailsComponent.MyDeleteAction());
         return result;
     }
 
-     void addNewItem(String name) {
-        MasterDetailsComponent.MyNode nodeToAdd = new MasterDetailsComponent.MyNode(new ItemNamedConfigurable(this, name));
-        myRoot.add(nodeToAdd);
+    void addNewItem(String name) {
+        MasterDetailsComponent.MyNode node = new MasterDetailsComponent.MyNode(new ItemNamedConfigurable(this, name));
+        myRoot.add(node);
         ((DefaultTreeModel)myTree.getModel()).reload(this.myRoot);
-        selectNodeInTree(nodeToAdd);
+        selectNodeInTree(node);
     }
 
     static class AddDumAwareAction extends DumbAwareAction {
-        private DtoTemplateConfigurable configurable;
-        public AddDumAwareAction(DtoTemplateConfigurable configurable) {
+        private CommonMasterDetail configurable;
+        public AddDumAwareAction(CommonMasterDetail configurable) {
             super(AllIcons.General.Add);
             this.configurable = configurable;
         }
 
         @Override
-        public @NotNull ActionUpdateThread getActionUpdateThread() {
-            return ActionUpdateThread.EDT;
-        }
-
-        @Override
-        public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+        public void actionPerformed(@NotNull AnActionEvent e) {
             String templateName = Messages.showInputDialog("Template name", "New", null);
             if (templateName == null || templateName.isEmpty()) {
                 return;
             }
 
-            //StateComponent.State state = Objects.requireNonNull(StateComponent.getInstance().getState());
-            if (configurable.state.getDtoTemplateMap().containsKey(templateName)) {
+            if (configurable.getItemNames().contains(templateName)) {
                 Messages.showErrorDialog(String.format("Template name: %s is existed!", templateName), "Existed");
                 return;
             }
 
+            configurable.hasModified = true;
             configurable.addNewItem(templateName);
         }
     }
 
     static class RemoveDumbAwareAction extends DumbAwareAction {
-        private DtoTemplateConfigurable configurable;
-        public RemoveDumbAwareAction(DtoTemplateConfigurable configurable) {
+        private CommonMasterDetail configurable;
+        public RemoveDumbAwareAction(CommonMasterDetail configurable) {
             super(AllIcons.General.Remove);
             this.configurable = configurable;
         }
 
-        @Override
-        public @NotNull ActionUpdateThread getActionUpdateThread() {
-            return ActionUpdateThread.EDT;
-        }
 
         @Override
         public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
@@ -143,14 +131,15 @@ public final class DtoTemplateConfigurable extends MasterDetailsComponent {
             int answer = Messages.showYesNoDialog("Are you sure you want to delete?", "Confirm", AllIcons.General.QuestionDialog);
 
             if (answer == 0) {
-                /*
-                for (TreePath path: configurable.myTree.getSelectionPaths()) {
-                    MasterDetailsComponent.MyNode node = (MasterDetailsComponent.MyNode)path.getLastPathComponent();
-                    configurable.state.getDtoTemplateMap().remove(node.getDisplayName());
-                }*/
                 // yes
-                configurable.removePaths(configurable.getMyTree().getSelectionPaths());
+                configurable.hasModified = true;
+                configurable.removePaths(configurable.myTree.getSelectionPaths());
             }
+        }
+
+        @Override
+        public @NotNull ActionUpdateThread getActionUpdateThread() {
+            return ActionUpdateThread.BGT;
         }
 
         @Override
@@ -172,9 +161,9 @@ public final class DtoTemplateConfigurable extends MasterDetailsComponent {
     }
 
     static class ItemNamedConfigurable extends NamedConfigurable<String> {
-        private final DtoTemplateConfigurable configurable;
+        private final CommonMasterDetail configurable;
         private final @NotNull String displayName;
-        ItemNamedConfigurable(@NotNull DtoTemplateConfigurable configurable, @NotNull String displayName) {
+        ItemNamedConfigurable(@NotNull CommonMasterDetail configurable, @NotNull String displayName) {
             this.configurable = configurable;
             this.displayName = displayName;
         }
@@ -195,11 +184,7 @@ public final class DtoTemplateConfigurable extends MasterDetailsComponent {
 
         @Override
         public JComponent createOptionsPanel() {
-            String content = "";
-            if (configurable.state.getDtoTemplateMap().containsKey(displayName)) {
-                content = configurable.state.getDtoTemplateMap().get(displayName);
-            }
-            configurable.form.updateForm(displayName, content);
+            configurable.updateForm(displayName);
             return configurable.form;
         }
 
@@ -211,50 +196,15 @@ public final class DtoTemplateConfigurable extends MasterDetailsComponent {
 
         @Override
         public boolean isModified() {
-            String previewContent = this.getPreviewString(configurable.state, configurable.form.getTemplateCode());
-            configurable.form.updatePreview(previewContent);
-            return !configurable.state.getDtoTemplateMap().containsKey(configurable.form.getTemplateName()) ||
-                    !configurable.state.getDtoTemplateMap().get(configurable.form.getTemplateName()).equals(configurable.form.getTemplateCode());
+            if (configurable.hasModified) {
+                return true;
+            }
+            return configurable.isFormModified(configurable.itemName);
         }
 
         @Override
         public void apply() throws ConfigurationException {
-            if (configurable.form.getTemplateName().isEmpty()) {
-                Messages.showErrorDialog("Template name is mandatory!", "Error");
-                return;
-            }
-
-            if (configurable.form.getTemplateCode().isEmpty()) {
-                Messages.showErrorDialog("Template code is mandatory!", "Error");
-                return;
-            }
-
-            configurable.state.getDtoTemplateMap().put(configurable.form.getTemplateName(), configurable.form.getTemplateCode());
-        }
-
-        private String getPreviewString(StateComponent.State settings, String templateCode) {
-            List<VelocityService.PropertyDTO> columns = new ArrayList<>();
-            VelocityService.PropertyDTO id = new VelocityService.PropertyDTO(
-                    "id",
-                    "INT"
-            );
-            id.setName("id");
-            id.setType("Integer");
-            columns.add(id);
-
-            VelocityService.PropertyDTO name = new VelocityService.PropertyDTO(
-                    "user_name",
-                    "VARCHAR"
-            );
-            name.setName("userName");
-            name.setType("String");
-            columns.add(name);
-
-            VelocityService.ClassDTO classDTO = new VelocityService.ClassDTO("your_class_name", columns);
-            VelocityService service = VelocityService.getInstance();
-            return service.merge(classDTO, templateCode);
+            configurable.applyChange();
         }
     }
-
-
 }

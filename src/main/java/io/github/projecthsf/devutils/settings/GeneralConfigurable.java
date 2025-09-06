@@ -2,7 +2,7 @@ package io.github.projecthsf.devutils.settings;
 
 import com.intellij.openapi.options.Configurable;
 import io.github.projecthsf.devutils.enums.ActionEnum;
-import io.github.projecthsf.devutils.forms.GeneralSettingForm;
+import io.github.projecthsf.devutils.forms.settings.GeneralSettingForm;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
