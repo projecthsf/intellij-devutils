@@ -6,15 +6,9 @@ import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.util.text.Strings;
 import com.intellij.openapi.wm.ToolWindow;
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import io.github.projecthsf.devutils.enums.NameCaseEnum;
-import io.github.projecthsf.devutils.forms.ApplyDatasetWindowForm;
+import io.github.projecthsf.devutils.forms.toolWindows.ApplyDatasetWindowForm;
 import io.github.projecthsf.devutils.service.VelocityService;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
-import io.github.projecthsf.devutils.utils.NameCaseUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -22,7 +16,6 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.StringReader;
 import java.util.*;
 import java.util.List;
 
