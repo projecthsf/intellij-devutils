@@ -7,6 +7,7 @@ import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.util.text.Strings;
 import com.intellij.openapi.wm.ToolWindow;
 import io.github.projecthsf.devutils.forms.toolWindows.ApplyDatasetWindowForm;
+import io.github.projecthsf.devutils.forms.toolWindows.ApplyDatasetWindowFormHandler;
 import io.github.projecthsf.devutils.service.VelocityService;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 import org.jetbrains.annotations.NotNull;
@@ -21,22 +22,14 @@ import java.util.List;
 
 public class ApplyDatasetWindowController extends JPanel {
     @NotNull ToolWindow toolWindow;
-    ApplyDatasetWindowForm form = new ApplyDatasetWindowForm(new ApplyDatasetWindowForm.Request(toolWindow));
+    ApplyDatasetWindowForm form = new ApplyDatasetWindowForm();
     public ApplyDatasetWindowController(@NotNull ToolWindow toolWindow) {
         this.toolWindow = toolWindow;
         setLayout(new BorderLayout());
         add(form, BorderLayout.CENTER);
         add(getControlPanel(), BorderLayout.SOUTH);
 
-        String datasetSample = ApplyDatasetUtil.getTemplate("templates/applydataset-dataset-sample.tpl");
-        form.updateDataSet(datasetSample);
-        form.addListeners(
-                new TextAreaDocumentListener(this, true),
-                new TextAreaDocumentListener(this, false),
-                new ComboBoxListener(this)
-        );
-        String codeTemplateSample = ApplyDatasetUtil.getTemplate("templates/applydataset-code-template-sample.tpl");
-        form.updateCodeTemplate(codeTemplateSample);
+        new ApplyDatasetWindowFormHandler(form);
     }
 
     private JPanel getControlPanel() {
@@ -61,37 +54,7 @@ public class ApplyDatasetWindowController extends JPanel {
     }
 
     public void updateDataSet(String text) {
-        form.updateDataSet(text);
-    }
-
-    String getPreviewString(boolean updateDataset) {
-        if (form.getDataSet().isEmpty() || form.getTemplateCode().isEmpty()) {
-            return "";
-        }
-        VelocityService service = VelocityService.getInstance();
-        List<ApplyDatasetUtil.DatatsetDTO> dtos = ApplyDatasetUtil.getDatasetRecords(form.getSeparator(), form.getDataSet(), updateDataset);
-
-
-        List<String> items = new ArrayList<>();
-        for (ApplyDatasetUtil.DatatsetDTO dto: dtos) {
-            items.add(getPreviewString(service, dto));
-        }
-
-        return Strings.join(items, "\n");
-    }
-
-    private String getPreviewString(VelocityService service, ApplyDatasetUtil.DatatsetDTO dto) {
-        String codeTemplate = form.getTemplateCode();
-        for (String key: dto.getSimplify().keySet()) {
-            codeTemplate = codeTemplate.replace(key, dto.getSimplify().get(key));
-        }
-
-        try {
-            codeTemplate = service.merge(dto.getVelocity(), codeTemplate);
-        } catch (Exception e) {
-
-        }
-        return codeTemplate;
+        form.updateDataset(text);
     }
 
     public static class ApplyButtonActionListener implements ActionListener {
@@ -106,32 +69,6 @@ public class ApplyDatasetWindowController extends JPanel {
         }
     }
 
-    static class ComboBoxListener implements ActionListener {
-        private ApplyDatasetWindowController controller;
-        ComboBoxListener(ApplyDatasetWindowController controller) {
-            this.controller = controller;
-        }
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String preview = controller.getPreviewString(true);
-            controller.form.updatePreview(preview);
-        }
-    }
-
-    static class TextAreaDocumentListener implements DocumentListener {
-        private ApplyDatasetWindowController controller;
-        private final boolean updateDataset;
-        TextAreaDocumentListener(ApplyDatasetWindowController controller, boolean updateDataset) {
-            this.controller = controller;
-            this.updateDataset = updateDataset;
-        }
-
-        @Override
-        public void documentChanged(@NotNull DocumentEvent event) {
-            String preview = controller.getPreviewString(updateDataset);
-            controller.form.updatePreview(preview);
-        }
-    }
 }
 
 
