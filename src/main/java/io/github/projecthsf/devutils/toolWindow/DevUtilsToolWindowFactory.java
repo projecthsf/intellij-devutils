@@ -6,7 +6,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
-import io.github.projecthsf.devutils.toolWindow.controller.ApplyDatasetWindowController;
+import io.github.projecthsf.devutils.toolWindow.controller.DatasetSnippetWindowController;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -14,7 +14,7 @@ import javax.swing.*;
 public class DevUtilsToolWindowFactory implements ToolWindowFactory, DumbAware {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-        toolWindow.getContentManager().addContent(createContent("Apply Dataset", new ApplyDatasetWindowController(toolWindow)));
+        toolWindow.getContentManager().addContent(createContent("Dataset Snippets", new DatasetSnippetWindowController(toolWindow)));
         //toolWindow.getContentManager().addContent(createContent("Sql to DTO", new SqlToDTOWindowPanel(toolWindow)));
     }
 
