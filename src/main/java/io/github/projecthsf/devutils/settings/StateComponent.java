@@ -28,6 +28,8 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
         private final Map<String, String> dtoTemplateMap = new HashMap<>();
         private  Map<ActionGroupEnum, Map<ActionEnum, Boolean>> actionAndGroupMap = new HashMap<>();
 
+        private final Map<String, ApplyDatasetState> applyDatasetMap = new HashMap<>();
+
         State() {
             String defaultTemplate = ApplyDatasetUtil.getTemplate("templates/java-dto-template.tpl");
             dtoTemplateMap.put(ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME, defaultTemplate);
@@ -49,6 +51,21 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
 
                 actionAndGroupMap.get(action.getGroup()).put(action, true);
             }
+
+            String datasetSample = ApplyDatasetUtil.getTemplate("templates/applydataset-dataset-sample.tpl");
+
+            String codeTemplateSampleDefault = ApplyDatasetUtil.getTemplate("templates/applydataset-code-template-sample-default.tpl");
+            ApplyDatasetState applyDatasetState = new ApplyDatasetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleDefault);
+            applyDatasetMap.put(
+                    ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME,
+                    new ApplyDatasetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleDefault)
+            );
+
+            String codeTemplateSampleAdvance = ApplyDatasetUtil.getTemplate("templates/applydataset-code-template-sample-advance.tpl");
+            applyDatasetMap.put(
+                    ApplyDatasetUtil.ADVANCE_TEMPLATE_NAME,
+                    new ApplyDatasetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleAdvance)
+            );
         }
 
         public Map<String, String> getDataTypeMap(LanguageEnum language) {
@@ -67,6 +84,9 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
             return actionAndGroupMap;
         }
 
+        public Map<String, ApplyDatasetState> getApplyDatasetMap() {
+            return applyDatasetMap;
+        }
     }
 
     private State myState = new State();
@@ -83,5 +103,30 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
     @Override
     public void loadState(@NotNull State state) {
         myState = state;
+    }
+
+
+    public static class ApplyDatasetState {
+        private CsvSeparatorEnum csvSeparator;
+        private String dataset;
+        private String codeTemplate;
+
+        public ApplyDatasetState(CsvSeparatorEnum csvSeparator, String dataset, String codeTemplate) {
+            this.csvSeparator = csvSeparator;
+            this.dataset = dataset;
+            this.codeTemplate = codeTemplate;
+        }
+
+        public String getDataset() {
+            return dataset;
+        }
+
+        public String getCodeTemplate() {
+            return codeTemplate;
+        }
+
+        public CsvSeparatorEnum getCsvSeparator() {
+            return csvSeparator;
+        }
     }
 }
