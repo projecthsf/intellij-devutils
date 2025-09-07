@@ -73,6 +73,7 @@ public class ApplyDatasetWindowFormHandler extends FormHandler {
         @Override
         public void actionPerformed(ActionEvent e) {
             String preview = controller.getPreviewString(true);
+            controller.modified = true;
             controller.form.updatePreview(preview);
         }
     }
@@ -88,6 +89,7 @@ public class ApplyDatasetWindowFormHandler extends FormHandler {
         @Override
         public void documentChanged(@NotNull DocumentEvent event) {
             String preview = controller.getPreviewString(updateDataset);
+            controller.modified = true;
             controller.form.updatePreview(preview);
         }
     }
