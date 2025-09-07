@@ -2,4 +2,4 @@
 	Year:$cols[1]
 	First Name: $cols[0].split(' ')[0]
   	Last Name: $cols[0].split(' ')[1]
-  	Replace: $cols[0].replace('n', '').replace('e', '')
+  	Replace: $cols[0].replace('n', '?').replace('e', '*')
