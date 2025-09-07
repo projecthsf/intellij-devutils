@@ -97,8 +97,10 @@
                                  id="DevUtils.General" parentId="DevUtils" displayName="General"/>
         <applicationConfigurable instance="io.github.projecthsf.devutils.settings.DtoTemplateConfigurable"
                                  id="DevUtils.DtoTemplate" parentId="DevUtils" displayName="DTO Templates"/>
-        <applicationConfigurable instance="io.github.projecthsf.devutils.settings.ApplyDatasetConfigurable"
-                                 id="DevUtils.CodeTemplate" parentId="DevUtils" displayName="Apply Dataset Use Cases"/>
+        <applicationConfigurable instance="io.github.projecthsf.devutils.settings.EmptyConfigurable"
+                                 id="DevUtils.ApplyDataset" parentId="DevUtils" displayName="Apply Dataset"/>
+        <applicationConfigurable instance="io.github.projecthsf.devutils.settings.ApplyDatasetSnippetConfigurable"
+                                 id="DevUtils.ApplyDataset.Snippets" parentId="DevUtils.ApplyDataset" displayName="Snippets"/>
 
 
         <applicationConfigurable instance="io.github.projecthsf.devutils.settings.EmptyConfigurable"
