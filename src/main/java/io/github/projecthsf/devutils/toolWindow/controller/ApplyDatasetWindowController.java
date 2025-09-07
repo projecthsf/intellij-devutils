@@ -1,20 +1,14 @@
 package io.github.projecthsf.devutils.toolWindow.controller;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.editor.Caret;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.ide.CopyPasteManager;
-import com.intellij.openapi.util.text.Strings;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.ToolWindow;
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import io.github.projecthsf.devutils.enums.NameCaseEnum;
-import io.github.projecthsf.devutils.forms.ApplyDatasetWindowForm;
-import io.github.projecthsf.devutils.service.VelocityService;
+import io.github.projecthsf.devutils.forms.toolWindows.ApplyDatasetWindowForm;
+import io.github.projecthsf.devutils.forms.toolWindows.ApplyDatasetWindowFormHandler;
+import io.github.projecthsf.devutils.settings.StateComponent;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
-import io.github.projecthsf.devutils.utils.NameCaseUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -22,45 +16,74 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.StringReader;
 import java.util.*;
-import java.util.List;
 
 public class ApplyDatasetWindowController extends JPanel {
+    StateComponent.State setting = Objects.requireNonNull(StateComponent.getInstance().getState());
     @NotNull ToolWindow toolWindow;
-    ApplyDatasetWindowForm form = new ApplyDatasetWindowForm(new ApplyDatasetWindowForm.Request(toolWindow));
+    ApplyDatasetWindowForm form = new ApplyDatasetWindowForm();
     public ApplyDatasetWindowController(@NotNull ToolWindow toolWindow) {
         this.toolWindow = toolWindow;
         setLayout(new BorderLayout());
         add(form, BorderLayout.CENTER);
         add(getControlPanel(), BorderLayout.SOUTH);
 
-        String datasetSample = ApplyDatasetUtil.getTemplate("templates/applydataset-dataset-sample.tpl");
-        form.updateDataSet(datasetSample);
-        form.addListeners(
-                new TextAreaDocumentListener(this, true),
-                new TextAreaDocumentListener(this, false),
-                new ComboBoxListener(this)
-        );
-        String codeTemplateSample = ApplyDatasetUtil.getTemplate("templates/applydataset-code-template-sample.tpl");
-        form.updateCodeTemplate(codeTemplateSample);
+        new ApplyDatasetWindowFormHandler(form);
     }
 
     private JPanel getControlPanel() {
         JPanel panel = new JPanel();
+        JButton snippetTooltip = ApplyDatasetUtil.getToolTipButton("Snippets", "Check Setting > Dev Utils > Apply Dataset > Snippets");
+
         JButton applyBtn = new JButton("Copy to clipboard");
         applyBtn.addActionListener(new ApplyButtonActionListener(form));
 
-        JButton closeBtn = new JButton("Close");
-        closeBtn.addActionListener(e -> {toolWindow.hide();});
+        JComboBox<String> templates = new JComboBox<>();
+        resetListTemplates(templates);
 
-        JButton resetButton = new JButton("Reset");
-        resetButton.addActionListener(e -> {form.reset();});
-        panel.add(closeBtn);
-        panel.add(resetButton);
+        templates.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (templates.getSelectedItem() == null) {
+                    return;
+                }
+
+                String selectedItem = (String) templates.getSelectedItem();
+                if (ApplyDatasetUtil.EMPTY_TEMPLATE_NAME.equals(selectedItem)) {
+                    form.reset();
+                    return;
+                }
+
+                if (!setting.getApplyDatasetMap().containsKey(selectedItem)) {
+                    Messages.showErrorDialog("This item has been deleted from configuration. Pls click refersh button", "Error");
+                    return;
+                }
+
+                StateComponent.ApplyDatasetState state = setting.getApplyDatasetMap().get(selectedItem);
+                form.updateForm(state.getCsvSeparator(), state.getDataset(), state.getCodeTemplate());
+            }
+        });
+
+        JButton refreshBtn = new JButton(AllIcons.Actions.Refresh);
+        refreshBtn.setPreferredSize(new Dimension(20, 20));
+        refreshBtn.addActionListener(e -> {
+            resetListTemplates(templates);
+        });
+
+        panel.add(snippetTooltip);
+        panel.add(templates);
+        panel.add(refreshBtn);
         panel.add(applyBtn);
 
         return panel;
+    }
+
+    private void resetListTemplates(JComboBox<String> templates) {
+        templates.removeAllItems();
+        templates.addItem(ApplyDatasetUtil.EMPTY_TEMPLATE_NAME);
+        for (String key: setting.getApplyDatasetMap().keySet()) {
+            templates.addItem(key);
+        }
     }
 
     public void updateCodeTemplate(Caret caret) {
@@ -68,37 +91,7 @@ public class ApplyDatasetWindowController extends JPanel {
     }
 
     public void updateDataSet(String text) {
-        form.updateDataSet(text);
-    }
-
-    String getPreviewString(boolean updateDataset) {
-        if (form.getDataSet().isEmpty() || form.getTemplateCode().isEmpty()) {
-            return "";
-        }
-        VelocityService service = VelocityService.getInstance();
-        List<ApplyDatasetUtil.DatatsetDTO> dtos = ApplyDatasetUtil.getDatasetRecords(form.getSeparator(), form.getDataSet(), updateDataset);
-
-
-        List<String> items = new ArrayList<>();
-        for (ApplyDatasetUtil.DatatsetDTO dto: dtos) {
-            items.add(getPreviewString(service, dto));
-        }
-
-        return Strings.join(items, "\n");
-    }
-
-    private String getPreviewString(VelocityService service, ApplyDatasetUtil.DatatsetDTO dto) {
-        String codeTemplate = form.getTemplateCode();
-        for (String key: dto.getSimplify().keySet()) {
-            codeTemplate = codeTemplate.replace(key, dto.getSimplify().get(key));
-        }
-
-        try {
-            codeTemplate = service.merge(dto.getVelocity(), codeTemplate);
-        } catch (Exception e) {
-
-        }
-        return codeTemplate;
+        form.updateDataset(text);
     }
 
     public static class ApplyButtonActionListener implements ActionListener {
@@ -113,32 +106,6 @@ public class ApplyDatasetWindowController extends JPanel {
         }
     }
 
-    static class ComboBoxListener implements ActionListener {
-        private ApplyDatasetWindowController controller;
-        ComboBoxListener(ApplyDatasetWindowController controller) {
-            this.controller = controller;
-        }
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String preview = controller.getPreviewString(true);
-            controller.form.updatePreview(preview);
-        }
-    }
-
-    static class TextAreaDocumentListener implements DocumentListener {
-        private ApplyDatasetWindowController controller;
-        private final boolean updateDataset;
-        TextAreaDocumentListener(ApplyDatasetWindowController controller, boolean updateDataset) {
-            this.controller = controller;
-            this.updateDataset = updateDataset;
-        }
-
-        @Override
-        public void documentChanged(@NotNull DocumentEvent event) {
-            String preview = controller.getPreviewString(updateDataset);
-            controller.form.updatePreview(preview);
-        }
-    }
 }
 
 
