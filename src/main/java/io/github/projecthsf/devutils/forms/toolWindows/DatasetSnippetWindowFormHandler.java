@@ -5,7 +5,7 @@ import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.util.text.Strings;
 import io.github.projecthsf.devutils.forms.FormHandler;
 import io.github.projecthsf.devutils.service.VelocityService;
-import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
+import io.github.projecthsf.devutils.utils.DatasetUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.ActionEvent;
@@ -37,18 +37,18 @@ public class DatasetSnippetWindowFormHandler extends FormHandler {
             return "";
         }
         VelocityService service = VelocityService.getInstance();
-        List<ApplyDatasetUtil.DatatsetDTO> dtos = ApplyDatasetUtil.getDatasetRecords(form.getSeparator(), form.getDataset(), updateDataset);
+        List<DatasetUtil.DatatsetDTO> dtos = DatasetUtil.getDatasetRecords(form.getSeparator(), form.getDataset(), updateDataset);
 
 
         List<String> items = new ArrayList<>();
-        for (ApplyDatasetUtil.DatatsetDTO dto: dtos) {
+        for (DatasetUtil.DatatsetDTO dto: dtos) {
             items.add(getPreviewString(service, dto));
         }
 
         return Strings.join(items, "\n");
     }
 
-    private String getPreviewString(VelocityService service, ApplyDatasetUtil.DatatsetDTO dto) {
+    private String getPreviewString(VelocityService service, DatasetUtil.DatatsetDTO dto) {
         String codeTemplate = form.getCodeTemplate();
         for (String key: dto.getSimplify().keySet()) {
             codeTemplate = codeTemplate.replace(key, dto.getSimplify().get(key));

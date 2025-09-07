@@ -111,7 +111,7 @@ public class DatasetUtil {
     }
 
     public static String getTemplate(String templateName) {
-        InputStream contentStream = ApplyDatasetUtil.class.getClassLoader().getResourceAsStream(templateName);
+        InputStream contentStream = DatasetUtil.class.getClassLoader().getResourceAsStream(templateName);
         if (contentStream == null) {
             return null;
         }

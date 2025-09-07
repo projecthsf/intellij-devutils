@@ -13,7 +13,7 @@ import com.intellij.util.ui.FormBuilder;
 import io.github.projecthsf.devutils.enums.CsvSeparatorEnum;
 import io.github.projecthsf.devutils.enums.LanguageEnum;
 import io.github.projecthsf.devutils.utils.ActionUtil;
-import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
+import io.github.projecthsf.devutils.utils.DatasetUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -94,15 +94,15 @@ public class DatasetSnippetWindowForm extends JPanel {
     }
 
     private JPanel getCenterPanel() {
-        String datasetTooltipMsg = ApplyDatasetUtil.getTemplate("templates/dataset-tooltip.html");
-        JButton dataSetTooltip = ApplyDatasetUtil.getToolTipButton("Dataset (CSV)", datasetTooltipMsg);
+        String datasetTooltipMsg = DatasetUtil.getTemplate("templates/dataset-tooltip.html");
+        JButton dataSetTooltip = DatasetUtil.getToolTipButton("Dataset (CSV)", datasetTooltipMsg);
         JPanel datasetPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         datasetPanel.add(dataSetTooltip);
         datasetPanel.add(new JBLabel("Separator"));
         datasetPanel.add(separartor);
 
-        String codeTemplateTooltipMsg = ApplyDatasetUtil.getTemplate("templates/code-template-tooltip.html");
-        JButton codeTemplateTooltip = ApplyDatasetUtil.getToolTipButton("Code template", codeTemplateTooltipMsg);
+        String codeTemplateTooltipMsg = DatasetUtil.getTemplate("templates/code-template-tooltip.html");
+        JButton codeTemplateTooltip = DatasetUtil.getToolTipButton("Code template", codeTemplateTooltipMsg);
         JPanel codeTemplatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         codeTemplatePanel.add(codeTemplateTooltip);
         ActionLink link = new ActionLink(

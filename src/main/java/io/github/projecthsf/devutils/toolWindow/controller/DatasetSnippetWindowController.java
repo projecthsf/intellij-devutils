@@ -8,7 +8,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import io.github.projecthsf.devutils.forms.toolWindows.DatasetSnippetWindowForm;
 import io.github.projecthsf.devutils.forms.toolWindows.DatasetSnippetWindowFormHandler;
 import io.github.projecthsf.devutils.settings.StateComponent;
-import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
+import io.github.projecthsf.devutils.utils.DatasetUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -34,7 +34,7 @@ public class DatasetSnippetWindowController extends JPanel {
 
     private JPanel getControlPanel() {
         JPanel panel = new JPanel();
-        JButton snippetTooltip = ApplyDatasetUtil.getToolTipButton("Snippets", "Check Setting > Dev Utils > Apply Dataset > Snippets");
+        JButton snippetTooltip = DatasetUtil.getToolTipButton("Snippets", "Check Setting > Dev Utils > Apply Dataset > Snippets");
 
         JButton applyBtn = new JButton("Copy to clipboard");
         applyBtn.addActionListener(new ApplyButtonActionListener(form));
@@ -57,7 +57,7 @@ public class DatasetSnippetWindowController extends JPanel {
                     }
                 }
                 String selectedItem = (String) templates.getSelectedItem();
-                if (ApplyDatasetUtil.EMPTY_TEMPLATE_NAME.equals(selectedItem)) {
+                if (DatasetUtil.EMPTY_TEMPLATE_NAME.equals(selectedItem)) {
                     form.reset();
                     handler.setModified(false);
                     return;
@@ -91,7 +91,7 @@ public class DatasetSnippetWindowController extends JPanel {
 
     private void resetListTemplates(JComboBox<String> templates) {
         templates.removeAllItems();
-        templates.addItem(ApplyDatasetUtil.EMPTY_TEMPLATE_NAME);
+        templates.addItem(DatasetUtil.EMPTY_TEMPLATE_NAME);
         for (String key: setting.getApplyDatasetMap().keySet()) {
             templates.addItem(key);
         }

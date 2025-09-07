@@ -12,7 +12,7 @@ import com.intellij.openapi.ui.NamedConfigurable;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.NlsSafe;
 import io.github.projecthsf.devutils.forms.FormHandler;
-import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
+import io.github.projecthsf.devutils.utils.DatasetUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +35,7 @@ public abstract class CommonMasterDetail<F extends JComponent> extends MasterDet
     public CommonMasterDetail() {
         this.form = createForm();
         getFormHandler();
-        itemName = ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME;
+        itemName = DatasetUtil.DEFAULT_TEMPLATE_NAME;
         loadExistedTreeNodes();
     }
 
@@ -159,7 +159,7 @@ public abstract class CommonMasterDetail<F extends JComponent> extends MasterDet
 
             for (TreePath path: configurable.myTree.getSelectionPaths()) {
                 MasterDetailsComponent.MyNode node = (MasterDetailsComponent.MyNode)path.getLastPathComponent();
-                if (ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME.equals(node.getDisplayName())) {
+                if (DatasetUtil.DEFAULT_TEMPLATE_NAME.equals(node.getDisplayName())) {
                     e.getPresentation().setEnabled(false);
                     return;
                 }

@@ -8,7 +8,7 @@ import io.github.projecthsf.devutils.actions.CommonAction;
 import io.github.projecthsf.devutils.enums.ActionEnum;
 import io.github.projecthsf.devutils.toolWindow.controller.DatasetSnippetWindowController;
 import io.github.projecthsf.devutils.utils.ActionUtil;
-import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
+import io.github.projecthsf.devutils.utils.DatasetUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class DatasetSnippetAsCodeTemplateAction extends CommonAction {
@@ -25,7 +25,7 @@ public class DatasetSnippetAsCodeTemplateAction extends CommonAction {
         assert toolWindow != null;
         toolWindow.show();
 
-        DatasetSnippetWindowController toolWindowPanel = ApplyDatasetUtil.getToolWindowPanel(toolWindow);
+        DatasetSnippetWindowController toolWindowPanel = DatasetUtil.getToolWindowPanel(toolWindow);
         assert toolWindowPanel != null;
 
         toolWindowPanel.updateCodeTemplate(caret);

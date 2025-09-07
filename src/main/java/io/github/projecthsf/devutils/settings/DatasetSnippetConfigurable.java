@@ -1,20 +1,20 @@
 package io.github.projecthsf.devutils.settings;
 
 import io.github.projecthsf.devutils.forms.FormHandler;
-import io.github.projecthsf.devutils.forms.settings.ApplyDatasetSettingForm;
+import io.github.projecthsf.devutils.forms.settings.DatasetSnippetSettingForm;
 import io.github.projecthsf.devutils.forms.toolWindows.DatasetSnippetWindowFormHandler;
 
 import java.util.Set;
 
-public class DatasetSnippetConfigurable extends CommonMasterDetail<ApplyDatasetSettingForm> {
+public class DatasetSnippetConfigurable extends CommonMasterDetail<DatasetSnippetSettingForm> {
     @Override
     protected Set<String> getItemNames() {
         return setting.getApplyDatasetMap().keySet();
     }
 
     @Override
-    ApplyDatasetSettingForm createForm() {
-        return new ApplyDatasetSettingForm();
+    DatasetSnippetSettingForm createForm() {
+        return new DatasetSnippetSettingForm();
     }
 
     @Override

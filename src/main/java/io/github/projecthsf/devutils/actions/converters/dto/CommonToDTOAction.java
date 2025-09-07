@@ -15,7 +15,7 @@ import io.github.projecthsf.devutils.enums.ActionEnum;
 import io.github.projecthsf.devutils.forms.actions.ToDTOForm;
 import io.github.projecthsf.devutils.service.VelocityService;
 import io.github.projecthsf.devutils.utils.ActionUtil;
-import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
+import io.github.projecthsf.devutils.utils.DatasetUtil;
 import io.github.projecthsf.devutils.utils.DialogUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -123,7 +123,7 @@ public abstract class CommonToDTOAction extends CommonAction {
             });
 
             for (String key: action.state.getDtoTemplateMap().keySet()) {
-                addNewItem(key, ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME.equals(key));
+                addNewItem(key, DatasetUtil.DEFAULT_TEMPLATE_NAME.equals(key));
             }
         }
         @Override

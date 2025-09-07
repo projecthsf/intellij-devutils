@@ -5,7 +5,7 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import io.github.projecthsf.devutils.enums.*;
-import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
+import io.github.projecthsf.devutils.utils.DatasetUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -31,8 +31,8 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
         private final Map<String, ApplyDatasetState> applyDatasetMap = new HashMap<>();
 
         State() {
-            String defaultTemplate = ApplyDatasetUtil.getTemplate("templates/java-dto-template.tpl");
-            dtoTemplateMap.put(ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME, defaultTemplate);
+            String defaultTemplate = DatasetUtil.getTemplate("templates/java-dto-template.tpl");
+            dtoTemplateMap.put(DatasetUtil.DEFAULT_TEMPLATE_NAME, defaultTemplate);
 
             resetDataTypeMap(LanguageEnum.SQL);
             for (SqlDataTypeEnum dataType: SqlDataTypeEnum.values()) {
@@ -52,18 +52,18 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
                 actionAndGroupMap.get(action.getGroup()).put(action, true);
             }
 
-            String datasetSample = ApplyDatasetUtil.getTemplate("templates/applydataset-dataset-sample.tpl");
+            String datasetSample = DatasetUtil.getTemplate("templates/applydataset-dataset-sample.tpl");
 
-            String codeTemplateSampleDefault = ApplyDatasetUtil.getTemplate("templates/applydataset-code-template-sample-default.tpl");
+            String codeTemplateSampleDefault = DatasetUtil.getTemplate("templates/applydataset-code-template-sample-default.tpl");
             ApplyDatasetState applyDatasetState = new ApplyDatasetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleDefault);
             applyDatasetMap.put(
-                    ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME,
+                    DatasetUtil.DEFAULT_TEMPLATE_NAME,
                     new ApplyDatasetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleDefault)
             );
 
-            String codeTemplateSampleAdvance = ApplyDatasetUtil.getTemplate("templates/applydataset-code-template-sample-advance.tpl");
+            String codeTemplateSampleAdvance = DatasetUtil.getTemplate("templates/applydataset-code-template-sample-advance.tpl");
             applyDatasetMap.put(
-                    ApplyDatasetUtil.ADVANCE_TEMPLATE_NAME,
+                    DatasetUtil.ADVANCE_TEMPLATE_NAME,
                     new ApplyDatasetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleAdvance)
             );
         }
