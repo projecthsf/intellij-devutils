@@ -2,11 +2,11 @@ package io.github.projecthsf.devutils.settings;
 
 import io.github.projecthsf.devutils.forms.FormHandler;
 import io.github.projecthsf.devutils.forms.settings.ApplyDatasetSettingForm;
-import io.github.projecthsf.devutils.forms.toolWindows.ApplyDatasetWindowFormHandler;
+import io.github.projecthsf.devutils.forms.toolWindows.DatasetSnippetWindowFormHandler;
 
 import java.util.Set;
 
-public class ApplyDatasetSnippetConfigurable extends CommonMasterDetail<ApplyDatasetSettingForm> {
+public class DatasetSnippetConfigurable extends CommonMasterDetail<ApplyDatasetSettingForm> {
     @Override
     protected Set<String> getItemNames() {
         return setting.getApplyDatasetMap().keySet();
@@ -52,7 +52,7 @@ public class ApplyDatasetSnippetConfigurable extends CommonMasterDetail<ApplyDat
 
     @Override
     protected FormHandler getFormHandler() {
-        return new ApplyDatasetWindowFormHandler(form);
+        return new DatasetSnippetWindowFormHandler(form);
     }
 
     @Override
