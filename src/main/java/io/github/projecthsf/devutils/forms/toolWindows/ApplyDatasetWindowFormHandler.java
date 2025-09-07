@@ -21,15 +21,17 @@ public class ApplyDatasetWindowFormHandler extends FormHandler {
     public ApplyDatasetWindowFormHandler(ApplyDatasetWindowForm form) {
         this.form = form;
 
-        String datasetSample = ApplyDatasetUtil.getTemplate("templates/applydataset-dataset-sample.tpl");
-        form.updateDataset(datasetSample);
         form.addListeners(
                 new TextAreaDocumentListener(this, true),
                 new TextAreaDocumentListener(this, false),
                 new ComboBoxListener(this)
         );
+        /*
+        String datasetSample = ApplyDatasetUtil.getTemplate("templates/applydataset-dataset-sample.tpl");
+        form.updateDataset(datasetSample);
+
         String codeTemplateSample = ApplyDatasetUtil.getTemplate("templates/applydataset-code-template-sample.tpl");
-        form.updateCodeTemplate(codeTemplateSample);
+        form.updateCodeTemplate(codeTemplateSample);*/
     }
 
 
@@ -89,6 +91,4 @@ public class ApplyDatasetWindowFormHandler extends FormHandler {
             controller.form.updatePreview(preview);
         }
     }
-
-
 }

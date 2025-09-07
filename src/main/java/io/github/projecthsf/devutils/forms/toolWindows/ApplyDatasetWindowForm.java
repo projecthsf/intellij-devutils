@@ -43,10 +43,16 @@ public class ApplyDatasetWindowForm extends JPanel {
     }
 
     public void reset() {
-        separartor.setSelectedIndex(0);
+        separartor.setSelectedItem(CsvSeparatorEnum.COMMA);
         ActionUtil.updateText(dataSet, "");
         ActionUtil.updateText(codeTemplate, "");
         //ActionUtil.updateText(preview, "");
+    }
+
+    public void updateForm(CsvSeparatorEnum csvSeparator, String dataset, String codeTemplate) {
+        separartor.setSelectedItem(csvSeparator);
+        ActionUtil.updateText(dataSet, dataset);
+        ActionUtil.updateText(this.codeTemplate, codeTemplate);
     }
 
     public String getDataset() {
