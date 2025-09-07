@@ -20,13 +20,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ApplyDatasetWindowForm extends JPanel {
+public class DatasetSnippetWindowForm extends JPanel {
     protected final EditorEx dataSet;
     protected final ComboBox<CsvSeparatorEnum> separartor;
     protected final Editor codeTemplate;
     protected final Editor preview;
 
-    public ApplyDatasetWindowForm() {
+    public DatasetSnippetWindowForm() {
         dataSet = ActionUtil.getEditorEx(LanguageEnum.JAVA);
         codeTemplate = ActionUtil.getEditor("");
         preview = ActionUtil.getEditor("", true);
