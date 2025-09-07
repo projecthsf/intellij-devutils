@@ -1,4 +1,4 @@
-package io.github.projecthsf.devutils.forms;
+package io.github.projecthsf.devutils.forms.actions;
 
 import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.editor.Editor;

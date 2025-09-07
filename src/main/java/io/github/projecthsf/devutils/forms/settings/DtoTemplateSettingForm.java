@@ -1,13 +1,11 @@
-package io.github.projecthsf.devutils.forms;
+package io.github.projecthsf.devutils.forms.settings;
 
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.ui.components.ActionLink;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
-import io.github.projecthsf.devutils.enums.LanguageEnum;
-import io.github.projecthsf.devutils.service.VelocityService;
-import io.github.projecthsf.devutils.settings.StateComponent;
 import io.github.projecthsf.devutils.utils.ActionUtil;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 
@@ -15,8 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DtoTemplateSettingForm extends JPanel {
     private final JBTextField templateName = new JBTextField();
@@ -73,6 +69,10 @@ public class DtoTemplateSettingForm extends JPanel {
 
     public String getTemplateCode() {
         return templateCode.getDocument().getText();
+    }
+
+    public void addListeners(DocumentListener codeTemplateListener) {
+        templateCode.getDocument().addDocumentListener(codeTemplateListener);
     }
 
 }

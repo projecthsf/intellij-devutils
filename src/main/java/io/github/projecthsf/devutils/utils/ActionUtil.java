@@ -1,7 +1,5 @@
 package io.github.projecthsf.devutils.utils;
 
-import com.intellij.json.JsonLanguage;
-import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -28,7 +26,8 @@ import java.awt.*;
 
 public class ActionUtil {
     public static Caret getSelectedCaret(@NotNull AnActionEvent event) {
-        Editor editor = event.getRequiredData(CommonDataKeys.EDITOR);
+        Editor editor = event.getDataContext().getData(CommonDataKeys.EDITOR);
+        assert editor != null;
         return editor.getCaretModel().getPrimaryCaret();
     }
 

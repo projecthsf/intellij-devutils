@@ -1,12 +1,10 @@
-package io.github.projecthsf.devutils.forms;
+package io.github.projecthsf.devutils.forms.settings;
 
-import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.FormBuilder;
 import io.github.projecthsf.devutils.enums.ActionEnum;
 import io.github.projecthsf.devutils.enums.ActionGroupEnum;
-import io.github.projecthsf.devutils.enums.LanguageEnum;
 
 import javax.swing.*;
 import java.awt.*;

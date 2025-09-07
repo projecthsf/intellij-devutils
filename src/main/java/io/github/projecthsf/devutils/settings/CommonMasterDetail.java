@@ -134,6 +134,7 @@ public abstract class CommonMasterDetail<F extends JComponent> extends MasterDet
                 return;
             }
 
+
             int answer = Messages.showYesNoDialog("Are you sure you want to delete? This action cannot be reverted", "Confirm", AllIcons.General.QuestionDialog);
 
             if (answer == 0) {
