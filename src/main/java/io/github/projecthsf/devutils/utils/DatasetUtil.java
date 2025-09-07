@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ApplyDatasetUtil {
+public class DatasetUtil {
     private static List<DatatsetDTO> records;
     public static class DatatsetDTO {
         private Map<Object, String> velocity = new HashMap<>();
