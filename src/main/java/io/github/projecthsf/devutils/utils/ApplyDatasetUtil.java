@@ -7,7 +7,7 @@ import com.intellij.ui.content.Content;
 import com.opencsv.*;
 import io.github.projecthsf.devutils.enums.CsvSeparatorEnum;
 import io.github.projecthsf.devutils.enums.NameCaseEnum;
-import io.github.projecthsf.devutils.toolWindow.controller.ApplyDatasetWindowController;
+import io.github.projecthsf.devutils.toolWindow.controller.DatasetSnippetWindowController;
 import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
@@ -136,9 +136,9 @@ public class ApplyDatasetUtil {
         return button;
     }
 
-    public static ApplyDatasetWindowController getToolWindowPanel(ToolWindow toolWindow) {
+    public static DatasetSnippetWindowController getToolWindowPanel(ToolWindow toolWindow) {
         for (Content content: toolWindow.getContentManager().getContents()) {
-            if (content.getComponent() instanceof ApplyDatasetWindowController toolWindowPanel) {
+            if (content.getComponent() instanceof DatasetSnippetWindowController toolWindowPanel) {
                 return toolWindowPanel;
             }
         }
