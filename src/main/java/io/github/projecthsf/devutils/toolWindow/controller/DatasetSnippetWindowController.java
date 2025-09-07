@@ -37,7 +37,7 @@ public class DatasetSnippetWindowController extends JPanel {
         JButton snippetTooltip = DatasetUtil.getToolTipButton("Snippets", "Check Setting > Dev Utils > Apply Dataset > Snippets");
 
         JButton applyBtn = new JButton("Copy to clipboard");
-        applyBtn.addActionListener(new ApplyButtonActionListener(form));
+        applyBtn.addActionListener(new ApplyButtonActionListener(this));
 
         JComboBox<String> templates = new JComboBox<>();
         resetListTemplates(templates);
@@ -106,14 +106,14 @@ public class DatasetSnippetWindowController extends JPanel {
     }
 
     public static class ApplyButtonActionListener implements ActionListener {
-        private final DatasetSnippetWindowForm form;
-        ApplyButtonActionListener(DatasetSnippetWindowForm form) {
-            this.form = form;
+        private final DatasetSnippetWindowController controller;
+        ApplyButtonActionListener(DatasetSnippetWindowController controller) {
+            this.controller = controller;
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            CopyPasteManager.getInstance().setContents(new StringSelection(form.getPreview()));
+            CopyPasteManager.getInstance().setContents(new StringSelection(controller.form.getPreview()));
         }
     }
 
