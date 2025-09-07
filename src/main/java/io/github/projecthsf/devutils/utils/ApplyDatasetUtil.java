@@ -7,7 +7,6 @@ import com.intellij.ui.content.Content;
 import com.opencsv.*;
 import io.github.projecthsf.devutils.enums.CsvSeparatorEnum;
 import io.github.projecthsf.devutils.enums.NameCaseEnum;
-import io.github.projecthsf.devutils.service.VelocityService;
 import io.github.projecthsf.devutils.toolWindow.controller.ApplyDatasetWindowController;
 import org.apache.commons.io.IOUtils;
 
@@ -36,6 +35,8 @@ public class ApplyDatasetUtil {
     }
 
     public static final String DEFAULT_TEMPLATE_NAME = "DEFAULT";
+    public static final String ADVANCE_TEMPLATE_NAME = "ADVANCE";
+    public static final String EMPTY_TEMPLATE_NAME = "--EMPTY--";
     public static String getPreviewString(String dataList, String templateCode) {
         List<String> previewData = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new StringReader(dataList))) {
