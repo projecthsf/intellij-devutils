@@ -5,8 +5,8 @@ import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.ToolWindow;
-import io.github.projecthsf.devutils.forms.toolWindows.ApplyDatasetWindowForm;
-import io.github.projecthsf.devutils.forms.toolWindows.ApplyDatasetWindowFormHandler;
+import io.github.projecthsf.devutils.forms.toolWindows.DatasetSnippetWindowForm;
+import io.github.projecthsf.devutils.forms.toolWindows.DatasetSnippetWindowFormHandler;
 import io.github.projecthsf.devutils.settings.StateComponent;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 import org.jetbrains.annotations.NotNull;
@@ -18,18 +18,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
-public class ApplyDatasetWindowController extends JPanel {
+public class DatasetSnippetWindowController extends JPanel {
     StateComponent.State setting = Objects.requireNonNull(StateComponent.getInstance().getState());
     @NotNull ToolWindow toolWindow;
-    ApplyDatasetWindowForm form = new ApplyDatasetWindowForm();
-    ApplyDatasetWindowFormHandler handler;
-    public ApplyDatasetWindowController(@NotNull ToolWindow toolWindow) {
+    DatasetSnippetWindowForm form = new DatasetSnippetWindowForm();
+    DatasetSnippetWindowFormHandler handler;
+    public DatasetSnippetWindowController(@NotNull ToolWindow toolWindow) {
         this.toolWindow = toolWindow;
         setLayout(new BorderLayout());
         add(form, BorderLayout.CENTER);
         add(getControlPanel(), BorderLayout.SOUTH);
 
-        handler = new ApplyDatasetWindowFormHandler(form);
+        handler = new DatasetSnippetWindowFormHandler(form);
     }
 
     private JPanel getControlPanel() {
@@ -106,8 +106,8 @@ public class ApplyDatasetWindowController extends JPanel {
     }
 
     public static class ApplyButtonActionListener implements ActionListener {
-        private final ApplyDatasetWindowForm form;
-        ApplyButtonActionListener(ApplyDatasetWindowForm form) {
+        private final DatasetSnippetWindowForm form;
+        ApplyButtonActionListener(DatasetSnippetWindowForm form) {
             this.form = form;
         }
 
