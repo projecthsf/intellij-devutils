@@ -22,13 +22,14 @@ public class ApplyDatasetWindowController extends JPanel {
     StateComponent.State setting = Objects.requireNonNull(StateComponent.getInstance().getState());
     @NotNull ToolWindow toolWindow;
     ApplyDatasetWindowForm form = new ApplyDatasetWindowForm();
+    ApplyDatasetWindowFormHandler handler;
     public ApplyDatasetWindowController(@NotNull ToolWindow toolWindow) {
         this.toolWindow = toolWindow;
         setLayout(new BorderLayout());
         add(form, BorderLayout.CENTER);
         add(getControlPanel(), BorderLayout.SOUTH);
 
-        new ApplyDatasetWindowFormHandler(form);
+        handler = new ApplyDatasetWindowFormHandler(form);
     }
 
     private JPanel getControlPanel() {
@@ -48,9 +49,17 @@ public class ApplyDatasetWindowController extends JPanel {
                     return;
                 }
 
+                if (handler.isModified()) {
+                    int result = Messages.showYesNoDialog("All your changes will be reset. Are your sure to change?", "Confirm", AllIcons.Toolwindows.InfoEvents);
+                    if (result > 0) {
+                        // no
+                        return;
+                    }
+                }
                 String selectedItem = (String) templates.getSelectedItem();
                 if (ApplyDatasetUtil.EMPTY_TEMPLATE_NAME.equals(selectedItem)) {
                     form.reset();
+                    handler.setModified(false);
                     return;
                 }
 
@@ -61,6 +70,8 @@ public class ApplyDatasetWindowController extends JPanel {
 
                 StateComponent.ApplyDatasetState state = setting.getApplyDatasetMap().get(selectedItem);
                 form.updateForm(state.getCsvSeparator(), state.getDataset(), state.getCodeTemplate());
+
+                handler.setModified(false);
             }
         });
 
