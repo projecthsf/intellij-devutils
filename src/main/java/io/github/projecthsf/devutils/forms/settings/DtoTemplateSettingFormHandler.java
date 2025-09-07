@@ -3,9 +3,7 @@ package io.github.projecthsf.devutils.forms.settings;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import io.github.projecthsf.devutils.forms.FormHandler;
-import io.github.projecthsf.devutils.forms.toolWindows.ApplyDatasetWindowFormHandler;
 import io.github.projecthsf.devutils.service.VelocityService;
-import io.github.projecthsf.devutils.settings.StateComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
