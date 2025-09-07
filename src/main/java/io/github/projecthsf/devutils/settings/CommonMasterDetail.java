@@ -46,6 +46,7 @@ public abstract class CommonMasterDetail<F extends JComponent> extends MasterDet
     protected abstract void updateForm(String itemName);
     protected abstract boolean isFormModified(String itemName);
     protected abstract void applyChange(String itemName);
+    protected abstract void deleteItem(String itemName);
 
     abstract F createForm();
     private void loadExistedTreeNodes() {
@@ -133,11 +134,12 @@ public abstract class CommonMasterDetail<F extends JComponent> extends MasterDet
                 return;
             }
 
-            int answer = Messages.showYesNoDialog("Are you sure you want to delete?", "Confirm", AllIcons.General.QuestionDialog);
+
+            int answer = Messages.showYesNoDialog("Are you sure you want to delete? This action cannot be reverted", "Confirm", AllIcons.General.QuestionDialog);
 
             if (answer == 0) {
                 // yes
-                configurable.hasModified = true;
+                configurable.deleteItem(configurable.itemName);
                 configurable.removePaths(configurable.myTree.getSelectionPaths());
             }
         }
@@ -210,6 +212,7 @@ public abstract class CommonMasterDetail<F extends JComponent> extends MasterDet
         @Override
         public void apply() throws ConfigurationException {
             configurable.applyChange(configurable.itemName);
+            configurable.hasModified = false;
         }
     }
 }

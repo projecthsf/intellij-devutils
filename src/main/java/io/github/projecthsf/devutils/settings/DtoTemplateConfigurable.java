@@ -71,4 +71,9 @@ public final class DtoTemplateConfigurable extends CommonMasterDetail<DtoTemplat
     protected FormHandler getFormHandler() {
         return new DtoTemplateSettingFormHandler(form);
     }
+
+    @Override
+    protected void deleteItem(String itemName) {
+        setting.getDtoTemplateMap().remove(itemName);
+    }
 }

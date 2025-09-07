@@ -1,14 +1,13 @@
 package io.github.projecthsf.devutils.toolWindow.controller;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.editor.Caret;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.ide.CopyPasteManager;
-import com.intellij.openapi.util.text.Strings;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.ToolWindow;
 import io.github.projecthsf.devutils.forms.toolWindows.ApplyDatasetWindowForm;
 import io.github.projecthsf.devutils.forms.toolWindows.ApplyDatasetWindowFormHandler;
-import io.github.projecthsf.devutils.service.VelocityService;
+import io.github.projecthsf.devutils.settings.StateComponent;
 import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,9 +17,9 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
-import java.util.List;
 
 public class ApplyDatasetWindowController extends JPanel {
+    StateComponent.State setting = Objects.requireNonNull(StateComponent.getInstance().getState());
     @NotNull ToolWindow toolWindow;
     ApplyDatasetWindowForm form = new ApplyDatasetWindowForm();
     public ApplyDatasetWindowController(@NotNull ToolWindow toolWindow) {
@@ -34,19 +33,57 @@ public class ApplyDatasetWindowController extends JPanel {
 
     private JPanel getControlPanel() {
         JPanel panel = new JPanel();
+        JButton snippetTooltip = ApplyDatasetUtil.getToolTipButton("Snippets", "Check Setting > Dev Utils > Apply Dataset > Snippets");
+
         JButton applyBtn = new JButton("Copy to clipboard");
         applyBtn.addActionListener(new ApplyButtonActionListener(form));
 
-        JButton closeBtn = new JButton("Close");
-        closeBtn.addActionListener(e -> {toolWindow.hide();});
+        JComboBox<String> templates = new JComboBox<>();
+        resetListTemplates(templates);
 
-        JButton resetButton = new JButton("Reset");
-        resetButton.addActionListener(e -> {form.reset();});
-        panel.add(closeBtn);
-        panel.add(resetButton);
+        templates.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (templates.getSelectedItem() == null) {
+                    return;
+                }
+
+                String selectedItem = (String) templates.getSelectedItem();
+                if (ApplyDatasetUtil.EMPTY_TEMPLATE_NAME.equals(selectedItem)) {
+                    form.reset();
+                    return;
+                }
+
+                if (!setting.getApplyDatasetMap().containsKey(selectedItem)) {
+                    Messages.showErrorDialog("This item has been deleted from configuration. Pls click refersh button", "Error");
+                    return;
+                }
+
+                StateComponent.ApplyDatasetState state = setting.getApplyDatasetMap().get(selectedItem);
+                form.updateForm(state.getCsvSeparator(), state.getDataset(), state.getCodeTemplate());
+            }
+        });
+
+        JButton refreshBtn = new JButton(AllIcons.Actions.Refresh);
+        refreshBtn.setPreferredSize(new Dimension(20, 20));
+        refreshBtn.addActionListener(e -> {
+            resetListTemplates(templates);
+        });
+
+        panel.add(snippetTooltip);
+        panel.add(templates);
+        panel.add(refreshBtn);
         panel.add(applyBtn);
 
         return panel;
+    }
+
+    private void resetListTemplates(JComboBox<String> templates) {
+        templates.removeAllItems();
+        templates.addItem(ApplyDatasetUtil.EMPTY_TEMPLATE_NAME);
+        for (String key: setting.getApplyDatasetMap().keySet()) {
+            templates.addItem(key);
+        }
     }
 
     public void updateCodeTemplate(Caret caret) {

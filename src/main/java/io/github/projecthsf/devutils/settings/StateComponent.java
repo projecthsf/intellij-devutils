@@ -53,9 +53,19 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
             }
 
             String datasetSample = ApplyDatasetUtil.getTemplate("templates/applydataset-dataset-sample.tpl");
-            String codeTemplateSample = ApplyDatasetUtil.getTemplate("templates/applydataset-code-template-sample.tpl");
-            ApplyDatasetState applyDatasetState = new ApplyDatasetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSample);
-            applyDatasetMap.put(ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME, applyDatasetState);
+
+            String codeTemplateSampleDefault = ApplyDatasetUtil.getTemplate("templates/applydataset-code-template-sample-default.tpl");
+            ApplyDatasetState applyDatasetState = new ApplyDatasetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleDefault);
+            applyDatasetMap.put(
+                    ApplyDatasetUtil.DEFAULT_TEMPLATE_NAME,
+                    new ApplyDatasetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleDefault)
+            );
+
+            String codeTemplateSampleAdvance = ApplyDatasetUtil.getTemplate("templates/applydataset-code-template-sample-advance.tpl");
+            applyDatasetMap.put(
+                    ApplyDatasetUtil.ADVANCE_TEMPLATE_NAME,
+                    new ApplyDatasetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleAdvance)
+            );
         }
 
         public Map<String, String> getDataTypeMap(LanguageEnum language) {
