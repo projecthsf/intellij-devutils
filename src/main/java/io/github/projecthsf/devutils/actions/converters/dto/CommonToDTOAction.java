@@ -42,7 +42,7 @@ public abstract class CommonToDTOAction extends CommonAction {
 
         form = new ToDTOForm();
         try {
-            tableDTO = getTableDTO(caret.getSelectedText());
+            tableDTO = getClassDTO(caret.getSelectedText());
         } catch (Exception e) {
             DialogUtil.showErrorTraceMessage("Trace: " + e.getMessage(), "JSON parse error");
             return;
@@ -58,7 +58,7 @@ public abstract class CommonToDTOAction extends CommonAction {
 
     }
 
-    protected abstract VelocityService.ClassDTO getTableDTO(String selectedText) throws Exception;
+    protected abstract VelocityService.ClassDTO getClassDTO(String selectedText) throws Exception;
 
     static class ToDTODialog extends DialogWrapper {
         private CommonToDTOAction action;

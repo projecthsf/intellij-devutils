@@ -20,80 +20,23 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DatasetSnippetWindowForm extends JPanel {
-    protected final EditorEx dataSet;
-    protected final ComboBox<CsvSeparatorEnum> separartor;
-    protected final Editor codeTemplate;
-    protected final Editor preview;
+public class DatasetSnippetWindowForm extends AbstractDatasetWindowForm {
 
+    //protected final Editor codeTemplate;
     public DatasetSnippetWindowForm() {
-        dataSet = ActionUtil.getEditorEx(LanguageEnum.JAVA);
+        super();
         codeTemplate = ActionUtil.getEditor("");
+        init();
+    }
+
+    public DatasetSnippetWindowForm(boolean init) {
+        dataSet = ActionUtil.getEditorEx(LanguageEnum.JAVA);
+        //codeTemplate = ActionUtil.getEditor("");
         preview = ActionUtil.getEditor("", true);
         separartor = new ComboBox<>(CsvSeparatorEnum.values());
-
-        //dataSet.getDocument().addDocumentListener(new TextAreaDocumentListener(request, this));
-        //templateCode.getDocument().addDocumentListener(new TextAreaDocumentListener(request, this));
-        //separartor.addActionListener(new ComboBoxListener(request, this));
-
-        setLayout(new BorderLayout(0, 20));
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 0));
-        add(getCenterPanel(), BorderLayout.PAGE_START);
-        //add(getControlPanel(), BorderLayout.CENTER);
     }
 
-    public void reset() {
-        separartor.setSelectedItem(CsvSeparatorEnum.COMMA);
-        ActionUtil.updateText(dataSet, "");
-        ActionUtil.updateText(codeTemplate, "");
-        //ActionUtil.updateText(preview, "");
-    }
-
-    public void updateForm(CsvSeparatorEnum csvSeparator, String dataset, String codeTemplate) {
-        separartor.setSelectedItem(csvSeparator);
-        ActionUtil.updateText(dataSet, dataset);
-        ActionUtil.updateText(this.codeTemplate, codeTemplate);
-    }
-
-    public String getDataset() {
-        return dataSet.getDocument().getText();
-    }
-
-    public CsvSeparatorEnum getSeparator() {
-        return (CsvSeparatorEnum) separartor.getSelectedItem();
-    }
-
-    public void addListeners(DocumentListener datasetListener, DocumentListener templateCodeListner, ActionListener separatorLister) {
-        dataSet.getDocument().addDocumentListener(datasetListener);
-        codeTemplate.getDocument().addDocumentListener(templateCodeListner);
-        separartor.addActionListener(separatorLister);
-    }
-
-    public String getCodeTemplate() {
-        return codeTemplate.getDocument().getText();
-    }
-
-    public String getPreview() {
-        return preview.getDocument().getText();
-    }
-
-    public void updatePreview(String text) {
-        ActionUtil.updateText(preview, text);
-    }
-
-    public void updateDataset(String text) {
-        ActionUtil.updateText(dataSet, text);
-    }
-
-    public void updateCodeTemplate(String text) {
-        ActionUtil.updateText(codeTemplate, text);
-    }
-
-    public void updateCodeTemplate(Caret caret) {
-        ActionUtil.updateText(codeTemplate, caret.getSelectedText());
-    }
-
-    private JPanel getCenterPanel() {
+    protected JPanel getCenterPanel() {
         String datasetTooltipMsg = DatasetUtil.getTemplate("templates/dataset-tooltip.html");
         JButton dataSetTooltip = DatasetUtil.getToolTipButton("Dataset (CSV)", datasetTooltipMsg);
         JPanel datasetPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -118,35 +61,12 @@ public class DatasetSnippetWindowForm extends JPanel {
         codeTemplatePanel.add(link);
         return FormBuilder.createFormBuilder()
                 .addComponent(datasetPanel)
-                .addComponent(ActionUtil.getEditorPanel(dataSet, 400, 180))
+                .addComponent(ActionUtil.getEditorPanel(dataSet, 400, 100))
                 .addComponent(codeTemplatePanel)
                 .addComponent(ActionUtil.getEditorPanel(codeTemplate, 400, 180))
                 .addComponent(new JBLabel("Result"))
                 .addComponent(ActionUtil.getEditorPanel(preview, 400, 180))
                 .getPanel();
-    }
-
-    public static class Request {
-        private ToolWindow toolWindow;
-        public Request(ToolWindow toolWindow) {
-            this.toolWindow = toolWindow;
-        }
-
-    }
-    static class ApplyResult {
-        private Caret caret;
-
-        public ApplyResult(Caret caret) {
-            this.caret = caret;
-        }
-
-        public Caret getCaret() {
-            return caret;
-        }
-
-        public void setCaret(Caret caret) {
-            this.caret = caret;
-        }
     }
 }
 

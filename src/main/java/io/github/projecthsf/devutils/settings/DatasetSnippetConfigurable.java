@@ -9,7 +9,7 @@ import java.util.Set;
 public class DatasetSnippetConfigurable extends CommonMasterDetail<DatasetSnippetSettingForm> {
     @Override
     protected Set<String> getItemNames() {
-        return setting.getApplyDatasetMap().keySet();
+        return setting.getDatasetSnippetMap().keySet();
     }
 
     @Override
@@ -19,8 +19,8 @@ public class DatasetSnippetConfigurable extends CommonMasterDetail<DatasetSnippe
 
     @Override
     protected void updateForm(String itemName) {
-        if (setting.getApplyDatasetMap().containsKey(itemName)) {
-            StateComponent.ApplyDatasetState state = setting.getApplyDatasetMap().get(itemName);
+        if (setting.getDatasetSnippetMap().containsKey(itemName)) {
+            StateComponent.DatasetSnippetState state = setting.getDatasetSnippetMap().get(itemName);
             form.updateForm(
                     state.getCsvSeparator(),
                     state.getDataset(),
@@ -34,16 +34,16 @@ public class DatasetSnippetConfigurable extends CommonMasterDetail<DatasetSnippe
 
     @Override
     protected void applyChange(String itemName) {
-        setting.getApplyDatasetMap().put(itemName, new StateComponent.ApplyDatasetState(form.getSeparator(), form.getDataset(), form.getCodeTemplate()));
+        setting.getDatasetSnippetMap().put(itemName, new StateComponent.DatasetSnippetState(form.getSeparator(), form.getDataset(), form.getCodeTemplate()));
     }
 
     @Override
     protected boolean isFormModified(String itemName) {
-        if (!setting.getApplyDatasetMap().containsKey(itemName)) {
+        if (!setting.getDatasetSnippetMap().containsKey(itemName)) {
             return true;
         }
 
-        StateComponent.ApplyDatasetState state = setting.getApplyDatasetMap().get(itemName);
+        StateComponent.DatasetSnippetState state = setting.getDatasetSnippetMap().get(itemName);
         return !state.getCsvSeparator().equals(form.getSeparator()) ||
                 !state.getDataset().equals(form.getDataset()) ||
                 !state.getCodeTemplate().equals(form.getCodeTemplate());
@@ -57,6 +57,6 @@ public class DatasetSnippetConfigurable extends CommonMasterDetail<DatasetSnippe
 
     @Override
     protected void deleteItem(String itemName) {
-        setting.getApplyDatasetMap().remove(itemName);
+        setting.getDatasetSnippetMap().remove(itemName);
     }
 }

@@ -1,7 +1,7 @@
 package io.github.projecthsf.devutils.enums;
 
 public enum ActionGroupEnum {
-    CONVERTERS("Converters"),
+    CONVERTERS("To DTO"),
     NAME_CASE("Name Case Converter"),
     APPLY_DATASET("Apply With Dataset"),
     STRING_UTILS("String Utils"),

@@ -51,4 +51,15 @@ public class DtoTemplateSettingFormHandler extends FormHandler {
             controller.form.updatePreview(preview);
         }
     }
+
+    @Override
+    public void updateForm(String templateName) {
+        System.out.println("=== updateForm");
+    }
+
+    @Override
+    public void resetForm() {
+        System.out.println("=== resetForm");
+    }
+
 }

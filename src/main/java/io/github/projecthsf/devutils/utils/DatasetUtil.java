@@ -35,6 +35,7 @@ public class DatasetUtil {
     }
 
     public static final String DEFAULT_TEMPLATE_NAME = "DEFAULT";
+    public static final String DEFAULT_VARIABLE_NAME = "className";
     public static final String ADVANCE_TEMPLATE_NAME = "ADVANCE";
     public static final String EMPTY_TEMPLATE_NAME = "--EMPTY--";
     public static String getPreviewString(String dataList, String templateCode) {

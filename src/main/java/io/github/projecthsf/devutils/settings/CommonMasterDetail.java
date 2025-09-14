@@ -191,7 +191,7 @@ public abstract class CommonMasterDetail<F extends JComponent> extends MasterDet
 
         @Override
         public JComponent createOptionsPanel() {
-            configurable.updateForm(displayName);
+            //configurable.updateForm(displayName);
             return configurable.form;
         }
 

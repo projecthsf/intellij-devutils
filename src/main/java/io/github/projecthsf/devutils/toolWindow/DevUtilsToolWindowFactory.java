@@ -14,8 +14,7 @@ import javax.swing.*;
 public class DevUtilsToolWindowFactory implements ToolWindowFactory, DumbAware {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-        toolWindow.getContentManager().addContent(createContent("Dataset Snippets", new DatasetSnippetWindowController(toolWindow)));
-        //toolWindow.getContentManager().addContent(createContent("Sql to DTO", new SqlToDTOWindowPanel(toolWindow)));
+        toolWindow.getContentManager().addContent(createContent("Apply Dataset", new DatasetSnippetWindowController(toolWindow)));
     }
 
 

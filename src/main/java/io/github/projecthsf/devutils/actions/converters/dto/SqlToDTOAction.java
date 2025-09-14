@@ -18,7 +18,7 @@ public class SqlToDTOAction extends CommonToDTOAction {
         super(ActionEnum.SQL_TO_DTO);
     }
 
-    protected VelocityService.ClassDTO getTableDTO(String sql) throws Exception {
+    protected VelocityService.ClassDTO getClassDTO(String sql) throws Exception {
         Statement statement = CCJSqlParserUtil.parse(sql);
         if (statement instanceof CreateTable createTable) {
             List<VelocityService.PropertyDTO> columns = new ArrayList<>();

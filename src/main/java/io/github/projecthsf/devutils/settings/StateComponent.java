@@ -6,6 +6,7 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import io.github.projecthsf.devutils.enums.*;
 import io.github.projecthsf.devutils.utils.DatasetUtil;
+import org.apache.groovy.util.Maps;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -28,7 +29,8 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
         private final Map<String, String> dtoTemplateMap = new HashMap<>();
         private  Map<ActionGroupEnum, Map<ActionEnum, Boolean>> actionAndGroupMap = new HashMap<>();
 
-        private final Map<String, ApplyDatasetState> applyDatasetMap = new HashMap<>();
+        private final Map<String, DatasetSnippetState> datasetSnippetMap = new HashMap<>();
+        private final Map<String, DatasetToDTOState> datesetToDtoMap = new HashMap<>();
 
         State() {
             String defaultTemplate = DatasetUtil.getTemplate("templates/java-dto-template.tpl");
@@ -55,17 +57,21 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
             String datasetSample = DatasetUtil.getTemplate("templates/applydataset-dataset-sample.tpl");
 
             String codeTemplateSampleDefault = DatasetUtil.getTemplate("templates/applydataset-code-template-sample-default.tpl");
-            ApplyDatasetState applyDatasetState = new ApplyDatasetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleDefault);
-            applyDatasetMap.put(
+            DatasetSnippetState applyDatasetState = new DatasetSnippetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleDefault);
+            datasetSnippetMap.put(
                     DatasetUtil.DEFAULT_TEMPLATE_NAME,
-                    new ApplyDatasetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleDefault)
+                    new DatasetSnippetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleDefault)
             );
 
             String codeTemplateSampleAdvance = DatasetUtil.getTemplate("templates/applydataset-code-template-sample-advance.tpl");
-            applyDatasetMap.put(
+            datasetSnippetMap.put(
                     DatasetUtil.ADVANCE_TEMPLATE_NAME,
-                    new ApplyDatasetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleAdvance)
+                    new DatasetSnippetState(CsvSeparatorEnum.COMMA, datasetSample, codeTemplateSampleAdvance)
             );
+
+            String datasetToDtoCsv = DatasetUtil.getTemplate("templates/dataset-to-dto-csv.tpl");
+            String datasetToDtoTemplate = DatasetUtil.getTemplate("templates/dataset-to-dto-template.tpl");
+            datesetToDtoMap.put(DatasetUtil.DEFAULT_TEMPLATE_NAME, new DatasetToDTOState(CsvSeparatorEnum.SPACE, datasetToDtoCsv, datasetToDtoTemplate, getDefaultVariables()));
         }
 
         public Map<String, String> getDataTypeMap(LanguageEnum language) {
@@ -84,8 +90,16 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
             return actionAndGroupMap;
         }
 
-        public Map<String, ApplyDatasetState> getApplyDatasetMap() {
-            return applyDatasetMap;
+        public Map<String, DatasetSnippetState> getDatasetSnippetMap() {
+            return datasetSnippetMap;
+        }
+
+        public Map<String, DatasetToDTOState> getDatesetToDtoMap() {
+            return datesetToDtoMap;
+        }
+
+        public Map<String, String> getDefaultVariables() {
+            return Maps.of(DatasetUtil.DEFAULT_VARIABLE_NAME, "your_class_name");
         }
     }
 
@@ -106,12 +120,12 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
     }
 
 
-    public static class ApplyDatasetState {
+    public static class DatasetSnippetState {
         private CsvSeparatorEnum csvSeparator;
         private String dataset;
         private String codeTemplate;
 
-        public ApplyDatasetState(CsvSeparatorEnum csvSeparator, String dataset, String codeTemplate) {
+        public DatasetSnippetState(CsvSeparatorEnum csvSeparator, String dataset, String codeTemplate) {
             this.csvSeparator = csvSeparator;
             this.dataset = dataset;
             this.codeTemplate = codeTemplate;
@@ -127,6 +141,24 @@ public final class StateComponent implements PersistentStateComponent<StateCompo
 
         public CsvSeparatorEnum getCsvSeparator() {
             return csvSeparator;
+        }
+    }
+
+    public static class DatasetToDTOState extends DatasetSnippetState {
+        private Map<String, String> variables;
+
+        public DatasetToDTOState(
+                CsvSeparatorEnum csvSeparator,
+                String dataset,
+                String codeTemplate,
+                Map<String, String> variables
+        ) {
+            super(csvSeparator, dataset, codeTemplate);
+            this.variables = variables;
+        }
+
+        public Map<String, String> getVariables() {
+            return variables;
         }
     }
 }

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public abstract class CommonGroupAction extends DefaultActionGroup {
-    private final StateComponent.State state = Objects.requireNonNull(StateComponent.getInstance().getState());
+    protected final StateComponent.State state = Objects.requireNonNull(StateComponent.getInstance().getState());
     private final ActionGroupEnum group;
     public CommonGroupAction(ActionGroupEnum group) {
         this.group = group;

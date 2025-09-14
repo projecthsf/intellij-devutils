@@ -1,6 +1,7 @@
 package io.github.projecthsf.devutils.service;
 
 import io.github.projecthsf.devutils.enums.NameCaseEnum;
+import io.github.projecthsf.devutils.utils.DataTypeMappingUtil;
 import io.github.projecthsf.devutils.utils.NameCaseUtil;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -61,19 +62,20 @@ public class VelocityService {
         return writer.toString();
     }
 
-    private List<PropertyDTO> getFinalProperties(List<PropertyDTO> properties) {
-        List<PropertyDTO> newList = new ArrayList<>();
-        if (properties == null) {
-            return newList;
+    public String merge(Map<String, String> variables, List<Map<Object, String>> rows, String templateString) {
+        repo.putStringResource("FROM_TEMPLATE_STRING", templateString);
+        Template template = velocityEngine.getTemplate("FROM_TEMPLATE_STRING");
+        VelocityContext context = new VelocityContext();
+        context.put("NameCaseUtil", NameCaseUtil.class);
+        context.put("DataTypeUtil", DataTypeMappingUtil.class);
+        for (String key: variables.keySet()) {
+            context.put(key, variables.get(key));
         }
 
-        for (PropertyDTO property: properties) {
-            PropertyDTO dto = new PropertyDTO(property.getName(), property.getType());
-            dto.setName(NameCaseUtil.toNameCase(NameCaseEnum.CAMEL_CASE, property.getName()));
-            newList.add(dto);
-        }
-
-        return newList;
+        context.put("rows", rows);
+        StringWriter writer = new StringWriter();
+        template.merge(context, writer);
+        return writer.toString();
     }
 
     public static class PropertyDTO {

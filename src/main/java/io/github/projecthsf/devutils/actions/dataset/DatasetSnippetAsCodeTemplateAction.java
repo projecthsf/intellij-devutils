@@ -28,6 +28,6 @@ public class DatasetSnippetAsCodeTemplateAction extends CommonAction {
         DatasetSnippetWindowController toolWindowPanel = DatasetUtil.getToolWindowPanel(toolWindow);
         assert toolWindowPanel != null;
 
-        toolWindowPanel.updateCodeTemplate(caret);
+        toolWindowPanel.updateCodeTemplate(caret.getSelectedText());
     }
 }
