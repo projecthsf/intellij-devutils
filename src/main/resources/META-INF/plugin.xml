@@ -73,7 +73,7 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </group>
         <group id="DevUtils.ApplyDataSet" text="Apply With Dataset" popup="true"
-               class="io.github.projecthsf.devutils.actions.applydataset.ApplyDatasetActionGroup">
+               class="io.github.projecthsf.devutils.actions.dataset.DatasetActionGroup">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </group>
 
@@ -99,8 +99,10 @@
                                  id="DevUtils.DtoTemplate" parentId="DevUtils" displayName="DTO Templates"/>
         <applicationConfigurable instance="io.github.projecthsf.devutils.settings.EmptyConfigurable"
                                  id="DevUtils.ApplyDataset" parentId="DevUtils" displayName="Apply Dataset"/>
-        <applicationConfigurable instance="io.github.projecthsf.devutils.settings.ApplyDatasetSnippetConfigurable"
+        <applicationConfigurable instance="io.github.projecthsf.devutils.settings.DatasetSnippetConfigurable"
                                  id="DevUtils.ApplyDataset.Snippets" parentId="DevUtils.ApplyDataset" displayName="Snippets"/>
+        <applicationConfigurable instance="io.github.projecthsf.devutils.settings.DatasetToDTOConfigurable"
+                                 id="DevUtils.ApplyDataset.DTOTemplate" parentId="DevUtils.ApplyDataset" displayName="DTOs"/>
 
 
         <applicationConfigurable instance="io.github.projecthsf.devutils.settings.EmptyConfigurable"
@@ -117,7 +119,6 @@
         <toolWindow id="DevUtils" secondary="true" doNotActivateOnStart="true" icon="AllIcons.General.ExternalTools"
                     anchor="right"
                     factoryClass="io.github.projecthsf.devutils.toolWindow.DevUtilsToolWindowFactory"/>
-
 
         <!-- SQL Language -->
         <!--

@@ -1,26 +1,26 @@
 package io.github.projecthsf.devutils.settings;
 
 import io.github.projecthsf.devutils.forms.FormHandler;
-import io.github.projecthsf.devutils.forms.settings.ApplyDatasetSettingForm;
-import io.github.projecthsf.devutils.forms.toolWindows.ApplyDatasetWindowFormHandler;
+import io.github.projecthsf.devutils.forms.settings.DatasetSnippetSettingForm;
+import io.github.projecthsf.devutils.forms.toolWindows.DatasetSnippetWindowFormHandler;
 
 import java.util.Set;
 
-public class ApplyDatasetSnippetConfigurable extends CommonMasterDetail<ApplyDatasetSettingForm> {
+public class DatasetSnippetConfigurable extends CommonMasterDetail<DatasetSnippetSettingForm> {
     @Override
     protected Set<String> getItemNames() {
-        return setting.getApplyDatasetMap().keySet();
+        return setting.getDatasetSnippetMap().keySet();
     }
 
     @Override
-    ApplyDatasetSettingForm createForm() {
-        return new ApplyDatasetSettingForm();
+    DatasetSnippetSettingForm createForm() {
+        return new DatasetSnippetSettingForm();
     }
 
     @Override
     protected void updateForm(String itemName) {
-        if (setting.getApplyDatasetMap().containsKey(itemName)) {
-            StateComponent.ApplyDatasetState state = setting.getApplyDatasetMap().get(itemName);
+        if (setting.getDatasetSnippetMap().containsKey(itemName)) {
+            StateComponent.DatasetSnippetState state = setting.getDatasetSnippetMap().get(itemName);
             form.updateForm(
                     state.getCsvSeparator(),
                     state.getDataset(),
@@ -34,16 +34,16 @@ public class ApplyDatasetSnippetConfigurable extends CommonMasterDetail<ApplyDat
 
     @Override
     protected void applyChange(String itemName) {
-        setting.getApplyDatasetMap().put(itemName, new StateComponent.ApplyDatasetState(form.getSeparator(), form.getDataset(), form.getCodeTemplate()));
+        setting.getDatasetSnippetMap().put(itemName, new StateComponent.DatasetSnippetState(form.getSeparator(), form.getDataset(), form.getCodeTemplate()));
     }
 
     @Override
     protected boolean isFormModified(String itemName) {
-        if (!setting.getApplyDatasetMap().containsKey(itemName)) {
+        if (!setting.getDatasetSnippetMap().containsKey(itemName)) {
             return true;
         }
 
-        StateComponent.ApplyDatasetState state = setting.getApplyDatasetMap().get(itemName);
+        StateComponent.DatasetSnippetState state = setting.getDatasetSnippetMap().get(itemName);
         return !state.getCsvSeparator().equals(form.getSeparator()) ||
                 !state.getDataset().equals(form.getDataset()) ||
                 !state.getCodeTemplate().equals(form.getCodeTemplate());
@@ -52,11 +52,11 @@ public class ApplyDatasetSnippetConfigurable extends CommonMasterDetail<ApplyDat
 
     @Override
     protected FormHandler getFormHandler() {
-        return new ApplyDatasetWindowFormHandler(form);
+        return new DatasetSnippetWindowFormHandler(form);
     }
 
     @Override
     protected void deleteItem(String itemName) {
-        setting.getApplyDatasetMap().remove(itemName);
+        setting.getDatasetSnippetMap().remove(itemName);
     }
 }

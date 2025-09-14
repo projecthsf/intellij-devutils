@@ -7,7 +7,7 @@ import com.intellij.ui.components.ActionLink;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
 import io.github.projecthsf.devutils.utils.ActionUtil;
-import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
+import io.github.projecthsf.devutils.utils.DatasetUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,9 +32,9 @@ public class DtoTemplateSettingForm extends JPanel {
         previewPanel.add(preview.getComponent(), BorderLayout.CENTER);
         previewPanel.setPreferredSize(new Dimension(500, 250)); // Example preferred size
 
-        String tooltip = ApplyDatasetUtil.getTemplate("templates/language-dto-template-tooltip.html");
+        String tooltip = DatasetUtil.getTemplate("templates/language-dto-template-tooltip.html");
         JPanel codeTemplatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        codeTemplatePanel.add(ApplyDatasetUtil.getToolTipButton("Code template", tooltip));
+        codeTemplatePanel.add(DatasetUtil.getToolTipButton("Code template", tooltip));
         ActionLink link = new ActionLink(
                 "View document",
                 new ActionListener() {

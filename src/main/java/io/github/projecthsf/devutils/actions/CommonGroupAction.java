@@ -1,24 +1,18 @@
 package io.github.projecthsf.devutils.actions;
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.editor.Caret;
-import io.github.projecthsf.devutils.actions.applydataset.ApplyDataSetAsCodeTemplateAction;
-import io.github.projecthsf.devutils.actions.applydataset.ApplyDataSetAsDatasetAction;
-import io.github.projecthsf.devutils.enums.ActionEnum;
 import io.github.projecthsf.devutils.enums.ActionGroupEnum;
 import io.github.projecthsf.devutils.settings.StateComponent;
 import io.github.projecthsf.devutils.utils.ActionUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public abstract class CommonGroupAction extends DefaultActionGroup {
-    private final StateComponent.State state = Objects.requireNonNull(StateComponent.getInstance().getState());
+    protected final StateComponent.State state = Objects.requireNonNull(StateComponent.getInstance().getState());
     private final ActionGroupEnum group;
     public CommonGroupAction(ActionGroupEnum group) {
         this.group = group;

@@ -9,6 +9,7 @@ public enum ActionEnum {
     APPLY_DATA_SET_AS_DATASET("Copy as dataset", null, ActionGroupEnum.APPLY_DATASET),
     SQL_TO_DTO("SQL to DTO", AllIcons.Nodes.DataSchema, ActionGroupEnum.CONVERTERS),
     JSON_TO_DTO("JSON to DTO", AllIcons.FileTypes.Json, ActionGroupEnum.CONVERTERS),
+    DATASET_TO_DTO("Dataset to DTO", AllIcons.FileTypes.Json, ActionGroupEnum.CONVERTERS),
     NAME_CASE("Switch name cases between camel case/ snake case/...", null, ActionGroupEnum.NAME_CASE),
     GET_LENGTH("Get length", null, ActionGroupEnum.STRING_UTILS),
     REMOVE_HTML_TAGS("Remove HTML tags", null, ActionGroupEnum.STRING_UTILS),

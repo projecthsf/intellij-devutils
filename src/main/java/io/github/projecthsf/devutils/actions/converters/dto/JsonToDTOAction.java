@@ -16,7 +16,7 @@ public class JsonToDTOAction extends CommonToDTOAction {
         super(ActionEnum.JSON_TO_DTO);
     }
     @Override
-    protected VelocityService.ClassDTO getTableDTO(String selectedText) throws Exception {
+    protected VelocityService.ClassDTO getClassDTO(String selectedText) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(selectedText, new TypeReference<Map<String, Object>>() {});
 

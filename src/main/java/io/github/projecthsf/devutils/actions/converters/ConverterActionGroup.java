@@ -1,11 +1,10 @@
 package io.github.projecthsf.devutils.actions.converters;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.actionSystem.ActionUpdateThread;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Caret;
+import com.intellij.ui.AnActionButton;
+import io.github.projecthsf.devutils.actions.CommonAction;
 import io.github.projecthsf.devutils.actions.CommonGroupAction;
 import io.github.projecthsf.devutils.actions.converters.dto.CommonToDTOAction;
 import io.github.projecthsf.devutils.actions.converters.dto.JsonToDTOAction;

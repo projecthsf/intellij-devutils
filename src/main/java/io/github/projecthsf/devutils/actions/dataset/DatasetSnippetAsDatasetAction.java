@@ -1,24 +1,21 @@
-package io.github.projecthsf.devutils.actions.applydataset;
+package io.github.projecthsf.devutils.actions.dataset;
 
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import io.github.projecthsf.devutils.actions.CommonAction;
 import io.github.projecthsf.devutils.enums.ActionEnum;
-import io.github.projecthsf.devutils.toolWindow.controller.ApplyDatasetWindowController;
+import io.github.projecthsf.devutils.toolWindow.controller.DatasetSnippetWindowController;
 import io.github.projecthsf.devutils.utils.ActionUtil;
-import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
+import io.github.projecthsf.devutils.utils.DatasetUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-
-public class ApplyDataSetAsCodeTemplateAction extends CommonAction {
-    ApplyDataSetAsCodeTemplateAction() {
-        super(ActionEnum.APPLY_DATA_SET_AS_CODE_TEMPLATE);
+public class DatasetSnippetAsDatasetAction extends CommonAction {
+    public DatasetSnippetAsDatasetAction() {
+        super(ActionEnum.APPLY_DATA_SET_AS_DATASET);
     }
+
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         Caret caret = ActionUtil.getSelectedCaret(event);
@@ -29,9 +26,10 @@ public class ApplyDataSetAsCodeTemplateAction extends CommonAction {
         assert toolWindow != null;
         toolWindow.show();
 
-        ApplyDatasetWindowController toolWindowPanel = ApplyDatasetUtil.getToolWindowPanel(toolWindow);
+        DatasetSnippetWindowController toolWindowPanel = DatasetUtil.getToolWindowPanel(toolWindow);
         assert toolWindowPanel != null;
 
-        toolWindowPanel.updateCodeTemplate(caret);
+        toolWindowPanel.updateDataSet(caret.getSelectedText());
     }
 }
+

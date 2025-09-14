@@ -2,23 +2,22 @@ package io.github.projecthsf.devutils.forms.toolWindows;
 
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
-import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.util.text.Strings;
+import io.github.projecthsf.devutils.enums.CsvSeparatorEnum;
 import io.github.projecthsf.devutils.forms.FormHandler;
 import io.github.projecthsf.devutils.service.VelocityService;
-import io.github.projecthsf.devutils.toolWindow.controller.ApplyDatasetWindowController;
-import io.github.projecthsf.devutils.utils.ApplyDatasetUtil;
+import io.github.projecthsf.devutils.settings.StateComponent;
+import io.github.projecthsf.devutils.utils.DatasetUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApplyDatasetWindowFormHandler extends FormHandler {
-    private ApplyDatasetWindowForm form;
-    public ApplyDatasetWindowFormHandler(ApplyDatasetWindowForm form) {
+public class DatasetSnippetWindowFormHandler extends FormHandler {
+    private DatasetSnippetWindowForm form;
+    public DatasetSnippetWindowFormHandler(DatasetSnippetWindowForm form) {
         this.form = form;
 
         form.addListeners(
@@ -26,32 +25,36 @@ public class ApplyDatasetWindowFormHandler extends FormHandler {
                 new TextAreaDocumentListener(this, false),
                 new ComboBoxListener(this)
         );
-        /*
-        String datasetSample = ApplyDatasetUtil.getTemplate("templates/applydataset-dataset-sample.tpl");
-        form.updateDataset(datasetSample);
-
-        String codeTemplateSample = ApplyDatasetUtil.getTemplate("templates/applydataset-code-template-sample.tpl");
-        form.updateCodeTemplate(codeTemplateSample);*/
     }
 
+    @Override
+    public void updateForm(String templateName) {
+        StateComponent.DatasetSnippetState state = setting.getDatasetSnippetMap().get(templateName);
+        form.updateForm(state.getCsvSeparator(), state.getDataset(), state.getCodeTemplate());
+    }
+
+    @Override
+    public void resetForm() {
+        form.updateForm(CsvSeparatorEnum.COMMA, "", "");
+    }
 
     String getPreviewString(boolean updateDataset) {
         if (form.getDataset().isEmpty() || form.getCodeTemplate().isEmpty()) {
             return "";
         }
         VelocityService service = VelocityService.getInstance();
-        List<ApplyDatasetUtil.DatatsetDTO> dtos = ApplyDatasetUtil.getDatasetRecords(form.getSeparator(), form.getDataset(), updateDataset);
+        List<DatasetUtil.DatatsetDTO> dtos = DatasetUtil.getDatasetRecords(form.getSeparator(), form.getDataset(), updateDataset);
 
 
         List<String> items = new ArrayList<>();
-        for (ApplyDatasetUtil.DatatsetDTO dto: dtos) {
+        for (DatasetUtil.DatatsetDTO dto: dtos) {
             items.add(getPreviewString(service, dto));
         }
 
         return Strings.join(items, "\n");
     }
 
-    private String getPreviewString(VelocityService service, ApplyDatasetUtil.DatatsetDTO dto) {
+    private String getPreviewString(VelocityService service, DatasetUtil.DatatsetDTO dto) {
         String codeTemplate = form.getCodeTemplate();
         for (String key: dto.getSimplify().keySet()) {
             codeTemplate = codeTemplate.replace(key, dto.getSimplify().get(key));
@@ -66,21 +69,22 @@ public class ApplyDatasetWindowFormHandler extends FormHandler {
     }
 
     static class ComboBoxListener implements ActionListener {
-        private ApplyDatasetWindowFormHandler controller;
-        ComboBoxListener(ApplyDatasetWindowFormHandler controller) {
+        private DatasetSnippetWindowFormHandler controller;
+        ComboBoxListener(DatasetSnippetWindowFormHandler controller) {
             this.controller = controller;
         }
         @Override
         public void actionPerformed(ActionEvent e) {
             String preview = controller.getPreviewString(true);
+            controller.modified = true;
             controller.form.updatePreview(preview);
         }
     }
 
     static class TextAreaDocumentListener implements DocumentListener {
-        private ApplyDatasetWindowFormHandler controller;
+        private DatasetSnippetWindowFormHandler controller;
         private final boolean updateDataset;
-        TextAreaDocumentListener(ApplyDatasetWindowFormHandler controller, boolean updateDataset) {
+        TextAreaDocumentListener(DatasetSnippetWindowFormHandler controller, boolean updateDataset) {
             this.controller = controller;
             this.updateDataset = updateDataset;
         }
@@ -88,6 +92,7 @@ public class ApplyDatasetWindowFormHandler extends FormHandler {
         @Override
         public void documentChanged(@NotNull DocumentEvent event) {
             String preview = controller.getPreviewString(updateDataset);
+            controller.modified = true;
             controller.form.updatePreview(preview);
         }
     }

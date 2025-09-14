@@ -7,7 +7,7 @@ import com.intellij.ui.content.Content;
 import com.opencsv.*;
 import io.github.projecthsf.devutils.enums.CsvSeparatorEnum;
 import io.github.projecthsf.devutils.enums.NameCaseEnum;
-import io.github.projecthsf.devutils.toolWindow.controller.ApplyDatasetWindowController;
+import io.github.projecthsf.devutils.toolWindow.controller.DatasetSnippetWindowController;
 import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ApplyDatasetUtil {
+public class DatasetUtil {
     private static List<DatatsetDTO> records;
     public static class DatatsetDTO {
         private Map<Object, String> velocity = new HashMap<>();
@@ -35,6 +35,7 @@ public class ApplyDatasetUtil {
     }
 
     public static final String DEFAULT_TEMPLATE_NAME = "DEFAULT";
+    public static final String DEFAULT_VARIABLE_NAME = "className";
     public static final String ADVANCE_TEMPLATE_NAME = "ADVANCE";
     public static final String EMPTY_TEMPLATE_NAME = "--EMPTY--";
     public static String getPreviewString(String dataList, String templateCode) {
@@ -111,7 +112,7 @@ public class ApplyDatasetUtil {
     }
 
     public static String getTemplate(String templateName) {
-        InputStream contentStream = ApplyDatasetUtil.class.getClassLoader().getResourceAsStream(templateName);
+        InputStream contentStream = DatasetUtil.class.getClassLoader().getResourceAsStream(templateName);
         if (contentStream == null) {
             return null;
         }
@@ -136,9 +137,9 @@ public class ApplyDatasetUtil {
         return button;
     }
 
-    public static ApplyDatasetWindowController getToolWindowPanel(ToolWindow toolWindow) {
+    public static DatasetSnippetWindowController getToolWindowPanel(ToolWindow toolWindow) {
         for (Content content: toolWindow.getContentManager().getContents()) {
-            if (content.getComponent() instanceof ApplyDatasetWindowController toolWindowPanel) {
+            if (content.getComponent() instanceof DatasetSnippetWindowController toolWindowPanel) {
                 return toolWindowPanel;
             }
         }
