@@ -21,7 +21,7 @@ public abstract class AbstractDatasetWindowForm extends JPanel {
 
     AbstractDatasetWindowForm() {
         dataSet = ActionUtil.getEditorEx(LanguageEnum.JAVA);
-        codeTemplate = ActionUtil.getEditor("", true);
+        codeTemplate = ActionUtil.getEditor("", false);
         preview = ActionUtil.getEditor("", true);
         separartor = new ComboBox<>(CsvSeparatorEnum.values());
 
