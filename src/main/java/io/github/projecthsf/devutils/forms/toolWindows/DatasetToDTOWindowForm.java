@@ -39,12 +39,12 @@ public class DatasetToDTOWindowForm extends AbstractDatasetWindowForm {
     public void updateForm(CsvSeparatorEnum csvSeparator, String dataset, String template, Map<String, String> variables) {
         variable.removeItems();
         for (String key: variables.keySet()) {
-            JTextField field = new JTextField(variables.get(key));
+            JTextField field = new JTextField(variables.get(key), 20);
             field.getDocument().addDocumentListener(variable.getListener());
             variable.addItem(key, field);
         }
 
-        variable.repaint();
+        variable.reload();
         // must be update after variable update
         super.updateForm(csvSeparator, dataset, template);
     }
@@ -103,6 +103,10 @@ public class DatasetToDTOWindowForm extends AbstractDatasetWindowForm {
     public static class VariablePanel extends JPanel {
         private Map<String, JTextField> items = new HashMap<>();
         private javax.swing.event.DocumentListener listener;
+        private FormBuilder builder = FormBuilder.createFormBuilder();
+        public VariablePanel() {
+            setLayout(new BorderLayout());
+        }
 
         public javax.swing.event.DocumentListener getListener() {
             return listener;
@@ -114,13 +118,18 @@ public class DatasetToDTOWindowForm extends AbstractDatasetWindowForm {
 
         public void  removeItems() {
             removeAll();
+            builder = FormBuilder.createFormBuilder();
             items = new HashMap<>();
         }
 
         public void addItem(String key, JTextField field) {
-            add(new JBLabel(key));
-            add(field);
+            builder.addLabeledComponent(key, field);
             items.put(key, field);
+        }
+
+        public void reload() {
+            add(builder.getPanel(), BorderLayout.PAGE_START);
+            repaint();
         }
 
         public Map<String, JTextField> getItems() {
