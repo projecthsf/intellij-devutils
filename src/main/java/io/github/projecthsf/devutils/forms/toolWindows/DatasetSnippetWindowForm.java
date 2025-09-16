@@ -24,16 +24,13 @@ public class DatasetSnippetWindowForm extends AbstractDatasetWindowForm {
 
     //protected final Editor codeTemplate;
     public DatasetSnippetWindowForm() {
-        super();
-        codeTemplate = ActionUtil.getEditor("");
+        this(false);
         init();
     }
 
     public DatasetSnippetWindowForm(boolean init) {
-        dataSet = ActionUtil.getEditorEx(LanguageEnum.JAVA);
-        //codeTemplate = ActionUtil.getEditor("");
-        preview = ActionUtil.getEditor("", true);
-        separartor = new ComboBox<>(CsvSeparatorEnum.values());
+        super();
+        codeTemplate = ActionUtil.getEditor("");
     }
 
     protected JPanel getCenterPanel() {
